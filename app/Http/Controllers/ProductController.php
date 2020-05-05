@@ -5,10 +5,20 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Product;
 
+use App\Utils\Util;
+
+use \DB;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $commonUtil;
+
+    public function __construct(Util $commonUtil)
+    {
+        $this->commonUtil = $commonUtil;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -61,10 +71,16 @@ class ProductController extends Controller
                 request()->image->move(public_path('uploads/images/'), $input['image']);
             }
 
-            Product::create($input);
+            DB::beginTransaction();
+
+            $product = Product::create($input);
+            $this->commonUtil->adjustPaymentStock($product->id, $product->name, $input['qty'], $input['purchase_price'], 'opening_stock');
+
+            DB::commit();
 
             flash('Berhasil menambahkan produk')->success();
         } catch(\Exception $e) {
+            DB::rollBack();
             flash($e->getMessage())->error();
         }
 
@@ -166,10 +182,17 @@ class ProductController extends Controller
         try {
             $input = $request->only(['qty']);
 
-            Product::find($id)->update($input);
+            DB::beginTransaction();
+
+            $product = Product::find($id);
+            $product->update($input);
+            $this->commonUtil->adjustPaymentStock($product->id, $product->name, $input['qty'], $input['purchase_price'], 'stock_adjustment');
+
+            DB::commit();
 
             flash('Berhasil merubah stok produk')->success();
         } catch(\Exception $e) {
+            DB::rollBack();
             flash($e->getMessage())->error();
         }
 

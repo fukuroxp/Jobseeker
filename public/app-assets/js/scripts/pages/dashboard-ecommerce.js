@@ -374,11 +374,11 @@ $(window).on("load", function () {
       x: { show: false }
     },
     series: [{
-      name: "This Month",
+      name: "Bulan Ini",
       data: [45000, 47000, 44800, 47500, 45500, 48000, 46500, 48600]
     },
     {
-      name: "Last Month",
+      name: "Bulan Lalu",
       data: [46000, 48000, 45500, 46600, 44500, 46500, 45000, 47000]
     }
     ],

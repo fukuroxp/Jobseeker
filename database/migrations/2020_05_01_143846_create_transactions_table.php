@@ -16,8 +16,8 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('business_id')->constrained();
-            $table->foreignId('table_id')->constrained();
-            $table->foreignId('customer_id');
+            $table->unsignedBigInteger('table_id')->nullable();
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreignId('employee_id');
             $table->string('ref_no');
             $table->string('type');
@@ -25,6 +25,9 @@ class CreateTransactionsTable extends Migration
             $table->string('payment_status');
             $table->decimal('total', 22, 2)->nullable();
             $table->timestamps();
+
+            $table->foreign('table_id')->references('id')->on('tables');
+            $table->foreign('customer_id')->references('id')->on('users');
         });
     }
 

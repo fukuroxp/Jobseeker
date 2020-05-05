@@ -17,7 +17,9 @@ class SellController extends Controller
      */
     public function index()
     {
-        $data = Transaction::where('business_id', auth()->user()->business_id)->get();
+        $data = Transaction::where('business_id', auth()->user()->business_id)
+                            ->where('type', 'sells')
+                            ->get();
         return view('sells.index', compact('data'));
     }
 

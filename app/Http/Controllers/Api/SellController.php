@@ -7,6 +7,8 @@ use App\TransactionProduct;
 use App\TransactionPayment;
 use App\Product;
 use App\Category;
+use App\Business;
+use App\Order;
 
 use App\Utils\Util;
 
@@ -32,15 +34,17 @@ class SellController extends Controller
      */
     public function index()
     {
-        $data = Transaction::where('type', 'sells')
+        if(auth()->user()->hasRole('Customer')) {
+            $data = Business::select(['id', 'name', 'address'])
+                            ->with(['transactions' => function($q) {
+                                $q->where('customer_id', auth()->user()->id);
+                            }]);
+        } else {
+            $data = Transaction::where('type', 'sells')
                             ->with(['business' => function($q) {
                                 $q->select(['id', 'name', 'address']);
-                            }]);
-
-        if(auth()->user()->hasRole('Customer')) {
-            $data = $data->where('customer_id', auth()->user()->id);
-        } else {
-            $data = $data->where('business_id', auth()->user()->business_id);
+                            }])
+                            ->where('business_id', auth()->user()->business_id);
         }
 
         $start = 0;
@@ -50,19 +54,38 @@ class SellController extends Controller
         $start = ($paged - 1) * $limit; 
         $data = $data->offset($start)->limit($limit)->get();
 
-        foreach($data as $key => $value) {
-            $products = [];
-            foreach($value->transaction_products as $tp) {
-                $product = Product::with(['category' => function($q) {
-                                        $q->select(['id', 'name']);
-                                    }])->find($tp->product_id);
-                $product->qty = $tp->qty;
-                $products[] = $product;
+        if(auth()->user()->hasRole('Customer')) {
+            foreach($data as $business_id => $business) {
+                foreach($business->transactions as $key => $value) {
+                    $products = [];
+                    foreach($value->transaction_products as $tp) {
+                        $product = Product::with(['category' => function($q) {
+                                                $q->select(['id', 'name']);
+                                            }])->find($tp->product_id);
+                        $product->qty = $tp->qty;
+                        $products[] = $product;
+                    }
+                    $data[$business_id]['transactions'][$key]->transaction_date = strftime("%A, %d %B %Y", strtotime($value->created_at));
+                    unset($data[$business_id]['transactions'][$key]->transaction_products);
+                    $data[$business_id]['transactions'][$key]->products = $products;
+                    $data[$business_id]['transactions'][$key]->order_id = $data[$business_id]['transactions'][$key]->order_id ?? 0;
+                }
             }
-            $data[$key]->transaction_date = strftime("%A, %d %B %Y", strtotime($value->created_at));
-            unset($data[$key]->transaction_products);
-            $data[$key]->products = $products;
-            $data[$key]->order_id = $data[$key]->order_id ?? 0;
+        } else {
+            foreach($data as $key => $value) {
+                $products = [];
+                foreach($value->transaction_products as $tp) {
+                    $product = Product::with(['category' => function($q) {
+                                            $q->select(['id', 'name']);
+                                        }])->find($tp->product_id);
+                    $product->qty = $tp->qty;
+                    $products[] = $product;
+                }
+                $data[$key]->transaction_date = strftime("%A, %d %B %Y", strtotime($value->created_at));
+                unset($data[$key]->transaction_products);
+                $data[$key]->products = $products;
+                $data[$key]->order_id = $data[$key]->order_id ?? 0;
+            }
         }
 
         return response()->json($data);
@@ -94,7 +117,7 @@ class SellController extends Controller
             $sell_data['employee_id'] = auth()->user()->id;
             $sell_data['ref_no'] = $this->commonUtil->generateTrxRefNo();
             $sell_data['type'] = 'sells';
-            $sell_data['status'] = 'final';
+            $sell_data['status'] = 'active';
             $sell_data['payment_status'] = 'unpaid';
 
             DB::beginTransaction();
@@ -118,6 +141,7 @@ class SellController extends Controller
                 ];
                 $products[] = $temp;
                 TransactionProduct::create($temp);
+                $this->commonUtil->updateStockProduct($product->id, $qty, '-');
             }
 
             $transaction->update(['total' => $total]);
@@ -215,7 +239,14 @@ class SellController extends Controller
             DB::beginTransaction();
 
             $sell->payment_status = 'paid';
+            $sell->status = 'finish';
             $sell->save();
+
+            if($sell->order_id) {
+                $order = Order::find($sell->order_id);
+                $order->status = 'finished';
+                $order->save();
+            }
 
             $tp = TransactionPayment::create([
                 'business_id' => $business_id,

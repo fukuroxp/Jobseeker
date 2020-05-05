@@ -17,13 +17,15 @@ class CreateTransactionPaymentsTable extends Migration
             $table->id();
             $table->foreignId('business_id')->constrained();
             $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
-            $table->foreignId('customer_id');
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreignId('employee_id');
             $table->string('ref_no');
             $table->enum('type', ['credit', 'debit']);
             $table->decimal('amount', 22, 2);
             $table->string('method');
             $table->timestamps();
+            
+            $table->foreign('customer_id')->references('id')->on('users');
         });
     }
 

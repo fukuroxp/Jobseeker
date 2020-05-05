@@ -28,8 +28,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api', 'middleware' => ['jwt.veri
     Route::post('sells/{id}/pay', 'SellController@pay');
     Route::get('sells/products', 'SellController@getProductSuggestion');
     Route::apiResource('sells', 'SellController');
+
     Route::get('orders/products/{business_id}', 'OrderController@getProductSuggestion');
     Route::post('orders/{id}/accept', 'OrderController@accept');
     Route::post('orders/{id}/reject', 'OrderController@reject');
+    Route::put('orders', 'OrderController@updateOrder');
     Route::apiResource('orders', 'OrderController');
+
+    Route::post('notify', 'HomeController@notify');
 });

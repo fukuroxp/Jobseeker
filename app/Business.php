@@ -11,4 +11,9 @@ class Business extends Model
     protected $casts = [
         'prefixes' => 'array'
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

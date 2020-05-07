@@ -105,6 +105,33 @@
     <!-- END: Theme JS-->
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    <script>
+        $(".load_notifications").on("show.bs.dropdown", function(e){
+            console.log('clicked')
+            var dd = $(this);
+            if (!$(this).data('loaded')) {
+                e.preventDefault();
+                var this_link = $(this);
+                var href = '{{action('HomeController@loadMoreNotifications')}}';
+                $('span.notifications_count').html('<i class="fa fa-refresh fa-spin fa-fw"></i>');
+                $.ajax({
+                    url: href,
+                    dataType: 'html',
+                    success: function (result) {
+                        $('.notifications_list').prepend(result);
+                        $('span.notifications_count').text('');
+                        this_link.data('loaded', true);
+                        dd.dropdown("toggle");
+                    },
+                });
+            }
+        });
+
+        $('body').on('click', function (e) {
+            $('.notif_content').removeClass('show'); 
+        });
+    </script>
     <!-- BEGIN: Page JS-->
     @yield('js')
     <!-- END: Page JS-->

@@ -28,6 +28,16 @@
             </li>
             <li class=" nav-item {{ request()->is('sells') ? ' active' : '' }}"><a href="{{ route('sells.index') }}"><i class="fa fa-cash-register"></i><span class="menu-title" data-i18n="Sells">Penjualan</span></a>
             </li>
+            <li class=" nav-item"><a href="#"><i class="fa fa-scroll"></i><span class="menu-title" data-i18n="Report">Laporan</span></a>
+                <ul class="menu-content">
+                    <li class="{{ request()->is('reports/profit') ? ' active is-shown' : '' }}">
+                        <a href="{{ route('reports.profit') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Sells">Penjualan</span></a>
+                    </li>
+                    <li class="{{ request()->is('reports/stock') ? ' active is-shown' : '' }}">
+                        <a href="{{ route('reports.stock') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Stock">Stok</span></a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>

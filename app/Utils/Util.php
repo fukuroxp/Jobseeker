@@ -6,6 +6,8 @@ use App\Transaction;
 use App\TransactionPayment;
 use App\TransactionProduct;
 use App\Product;
+use App\Business;
+use App\User;
 
 use \Notification;
 use App\Notifications\CommonNotification;
@@ -22,6 +24,14 @@ class Util
             $product->qty = $product->qty - $qty;
 
         $product->save();
+
+        if($product->qty == 0) {
+            $users = User::where('business_id', auth()->user()->business_id)->get();
+            $prefix = Business::find(auth()->user()->business_id)->prefixes['table'];
+            $this->notify($users, 'empty', 'stock', [
+                'name' => $product->name
+            ]);
+        }
 
         return true;
     }
@@ -70,11 +80,11 @@ class Util
         return $product;
     }
 
-    public function adjustPaymentStock($product_id, $product_name, $qty, $purchase_price, $type = 'opening_stock')
+    public function adjustPaymentStock($product_id, $product_name, $qty, $purchase_price, $type = 'opening_stock', $increament = true)
     {
         $business_id = auth()->user()->business_id;
         $employee_id = auth()->user()->id;
-        $amount = ($purchase_price * $qty);
+        $amount = ($qty > 0) ? ($purchase_price * $qty) : $purchase_price;
 
         $transaction = Transaction::create([
             'business_id' => $business_id,
@@ -95,27 +105,59 @@ class Util
         //     'type' => 'purchase'
         // ]);
 
-        TransactionPayment::create([
-            'business_id' => $business_id,
-            'transaction_id' => $transaction->id,
-            'customer_id' => null,
-            'employee_id' => $employee_id,
-            'ref_no' => $this->generatePaymentRefNo(),
-            'type' => 'credit',
-            'amount' => $amount,
-            'method' => 'cash'
-        ]);
-
-        TransactionPayment::create([
-            'business_id' => $business_id,
-            'transaction_id' => $transaction->id,
-            'customer_id' => null,
-            'employee_id' => $employee_id,
-            'ref_no' => $this->generatePaymentRefNo(),
-            'type' => 'debit',
-            'amount' => $amount,
-            'method' => 'cash'
-        ]);
+        if($type == 'opening_stock' || $increament) {
+            TransactionPayment::create([
+                'business_id' => $business_id,
+                'transaction_id' => $transaction->id,
+                'customer_id' => null,
+                'employee_id' => $employee_id,
+                'product_id' => $product_id,
+                'ref_no' => $this->generatePaymentRefNo(),
+                'type' => 'credit',
+                'amount' => $amount,
+                'method' => 'cash',
+                'description' => 'Modal Usaha'
+            ]);
+    
+            TransactionPayment::create([
+                'business_id' => $business_id,
+                'transaction_id' => $transaction->id,
+                'customer_id' => null,
+                'employee_id' => $employee_id,
+                'product_id' => $product_id,
+                'ref_no' => $this->generatePaymentRefNo(),
+                'type' => 'debit',
+                'amount' => $amount,
+                'method' => 'cash',
+                'description' => 'Pembelian Barang'
+            ]);
+        } else {
+            TransactionPayment::create([
+                'business_id' => $business_id,
+                'transaction_id' => $transaction->id,
+                'customer_id' => null,
+                'employee_id' => $employee_id,
+                'product_id' => $product_id,
+                'ref_no' => $this->generatePaymentRefNo(),
+                'type' => 'credit',
+                'amount' => $amount,
+                'method' => 'cash',
+                'description' => 'Retur Barang'
+            ]);
+            
+            TransactionPayment::create([
+                'business_id' => $business_id,
+                'transaction_id' => $transaction->id,
+                'customer_id' => null,
+                'employee_id' => $employee_id,
+                'product_id' => $product_id,
+                'ref_no' => $this->generatePaymentRefNo(),
+                'type' => 'debit',
+                'amount' => $amount,
+                'method' => 'cash',
+                'description' => 'Refund Modal Usaha'
+            ]);
+        }
 
         return $transaction;
     }

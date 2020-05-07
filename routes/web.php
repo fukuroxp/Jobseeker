@@ -35,4 +35,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('tables/print', 'TableController@print')->name('tables.print');
     Route::resource('tables', 'TableController');
     Route::resource('sells', 'SellController');
+    Route::get('home/notifications', 'HomeController@loadMoreNotifications');
+
+    Route::group(['prefix' => 'reports'], function () {
+        Route::get('profit', 'ReportController@profit')->name('reports.profit');
+        Route::get('stock', 'ReportController@stock')->name('reports.stock');
+    });
 });

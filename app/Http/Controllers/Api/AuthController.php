@@ -20,11 +20,25 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         try {
+            JWTAuth::factory()->setTTL(600);
             if (! $token = JWTAuth::attempt($credentials)) {
                 return $this->respondFailed('Email atau password anda salah');
             }
 
             $user = User::where('email', $credentials['email'])->first();
+
+            if(request()->header('coordinate')) {
+                $coordinate = explode(',', request()->header('coordinate'));
+                $user->lat = $coordinate[0];
+                $user->lng = $coordinate[1];
+                $user->save();
+            }
+
+            if(request()->header('FCM')) {
+                $user->fcm = request()->header('FCM');
+                $user->save();
+            }
+
             $user->role = $user->getRoleNames()[0];
             $user->token = $token;
             unset($user->roles);
@@ -58,6 +72,19 @@ class AuthController extends Controller
         ]);
         $user->assignRole('Customer');
 
+        if(request()->header('coordinate')) {
+            $coordinate = explode(',', request()->header('coordinate'));
+            $user->lat = $coordinate[0];
+            $user->lng = $coordinate[1];
+            $user->save();
+        }
+
+        if(request()->header('FCM')) {
+            $user->fcm = request()->header('FCM');
+            $user->save();
+        }
+
+        JWTAuth::factory()->setTTL(600);
         $token = JWTAuth::fromUser($user);
         $user->role = $user->getRoleNames()[0];
         $user->token = $token;

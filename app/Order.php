@@ -11,4 +11,9 @@ class Order extends Model
     protected $casts = [
         'products' => 'array'
     ];
+
+    public function table()
+    {
+        return $this->belongsTo(Table::class);
+    }
 }

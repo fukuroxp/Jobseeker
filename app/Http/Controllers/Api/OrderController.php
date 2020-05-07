@@ -7,6 +7,8 @@ use App\Category;
 use App\Order;
 use App\Transaction;
 use App\TransactionProduct;
+use App\Business;
+use App\User;
 
 use App\Utils\Util;
 
@@ -126,6 +128,12 @@ class OrderController extends Controller
             $order->total = $total;
             $order->order_date = strftime("%A, %d %B %Y", strtotime($order->created_at));
             $order->products = $products;
+            
+            $users = User::where('business_id', $order_data['business_id'])->get();
+            $prefix = Business::find($order_data['business_id'])->prefixes['table'];
+            $this->commonUtil->notify($users, 'new', 'order', [
+                'table' => $prefix ? $prefix.$order->table->name : $order->table->name
+            ]);
 
             return $this->respondSuccess('Berhasil memesan', $order);
         } catch(\Exception $e) {
@@ -170,6 +178,12 @@ class OrderController extends Controller
             $sell->save();
 
             DB::commit();
+            
+            $users = User::where('business_id', $order->business_id)->get();
+            $prefix = Business::find($order->business_id)->prefixes['table'];
+            $this->commonUtil->notify($users, 'new', 'order', [
+                'table' => $prefix ? $prefix.$order->table->name : $order->table->name
+            ]);
 
             return $this->respondSuccess('Berhasil menambah pesanan', $products);
         } catch(\Exception $e) {
@@ -295,6 +309,14 @@ class OrderController extends Controller
             $transaction->products = $products;
 
             DB::commit();
+            
+            $users = User::where('business_id', $order->business_id)->get();
+            $prefix = Business::find($order->business_id)->prefixes['table'];
+            $this->commonUtil->notify($users, 'sell', 'order', [
+                'ref_no' => $transaction->ref_no,
+                'table' => $prefix ? $prefix.$order->table->name : $order->table->name,
+                'total' => $transaction->total
+            ]);
 
             return $this->respondSuccess('Berhasil melakukan transaksi penjualan', $transaction);
         } catch(\Exception $e) {

@@ -36,4 +36,5 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api', 'middleware' => ['jwt.veri
     Route::apiResource('orders', 'OrderController');
 
     Route::post('notify', 'HomeController@notify');
+    Route::get('notifications', 'HomeController@loadMoreNotifications');
 });

@@ -9,6 +9,7 @@ use App\Product;
 use App\Category;
 use App\Business;
 use App\Order;
+use App\User;
 
 use App\Utils\Util;
 
@@ -148,6 +149,13 @@ class SellController extends Controller
             $transaction->products = $products;
 
             DB::commit();
+            
+            $users = User::where('business_id', $transaction->business_id)->get();
+            $this->commonUtil->notify($users, 'sell', 'order', [
+                'ref_no' => $transaction->ref_no,
+                'table' => 'MANUAL',
+                'total' => $transaction->total
+            ]);
 
             return $this->respondSuccess('Berhasil melakukan transaksi penjualan', $transaction);
         } catch(\Exception $e) {
@@ -256,7 +264,8 @@ class SellController extends Controller
                 'ref_no' => $this->commonUtil->generatePaymentRefNo(),
                 'type' => 'credit',
                 'amount' => $amount,
-                'method' => 'cash'
+                'method' => 'cash',
+                'description' => 'Penjualan Barang'
             ]);
             
             $products = [];
@@ -270,6 +279,13 @@ class SellController extends Controller
             $sell->order_id = $sell->order_id ?? 0;
             
             DB::commit();
+            
+            $users = User::where('business_id', $sell->business_id)->get();
+            $prefix = Business::find($sell->business_id)->prefixes['table'];
+            $this->commonUtil->notify($users, 'pay', 'order', [
+                'ref_no' => $sell->ref_no,
+                'total' => $tp->amount
+            ]);
             
             return $this->respondSuccess('Berhasil menyelesaikan transaksi penjualan', $sell);
         } catch(\Exception $e) {

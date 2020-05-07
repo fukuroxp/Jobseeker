@@ -182,11 +182,25 @@ class ProductController extends Controller
         try {
             $input = $request->only(['qty']);
 
+            $product = Product::find($id);
+
+            if($product->qty == $input['qty']) {
+                flash('Tidak ada perubahan stok produk')->warning();
+                return redirect()->route('products.index');
+            }
+
             DB::beginTransaction();
 
-            $product = Product::find($id);
+            if($product->qty < $input['qty']) {
+                $increament = true;
+                $qty = $input['qty'];
+            } else {
+                $increament = false;
+                $qty = $product->qty - $input['qty'];
+            }
+
             $product->update($input);
-            $this->commonUtil->adjustPaymentStock($product->id, $product->name, $input['qty'], $input['purchase_price'], 'stock_adjustment');
+            $this->commonUtil->adjustPaymentStock($product->id, $product->name, $qty, $product->purchase_price, 'stock_adjustment', $increament);
 
             DB::commit();
 

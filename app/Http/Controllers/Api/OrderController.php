@@ -34,8 +34,16 @@ class OrderController extends Controller
     public function index()
     {
         if(auth()->user()->hasRole('Customer')) {
-            $data = Order::where('customer_id', auth()->user()->id)
-                        ->where('status', 'activated')
+            $data = Transaction::where('customer_id', auth()->user()->id)
+                        ->where('status', 'active')
+                        ->with([
+                            'employee' => function ($q) {
+                                $q->select(['id', 'name']);
+                            },
+                            'business' => function ($q) {
+                                $q->select(['id', 'name', 'address', 'phone']);
+                            }
+                        ])
                         ->orderBy('created_at', 'DESC')
                         ->first();
 
@@ -43,13 +51,9 @@ class OrderController extends Controller
                 return $this->respondFailed('Tidak ada order aktif');
             }
 
-            $data->products = Transaction::where('order_id', $data->id)
-                                        ->firstOrFail()
-                                        ->transaction_products;
-
             $products = [];
             $total = 0;
-            foreach($data->products as $prod) {
+            foreach($data->transaction_products as $prod) {
                 $product = Product::with(['category' => function($q) {
                                         $q->select(['id', 'name']);
                                     }])->find($prod['product_id']);
@@ -60,6 +64,7 @@ class OrderController extends Controller
             $data->total = $total;
             $data->order_date = strftime("%A, %d %B %Y", strtotime($data->created_at));
             $data->products = $products;
+            unset($data->transaction_products);
 
             return $this->respondSuccess('Active Order Retrivied', $data);
         } else {
@@ -109,9 +114,10 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
-            $order_data = $request->only(['business_id', 'table_id', 'products']);
+            $order_data = $request->only(['business_id', 'table_id', 'products', 'transaction_id']);
             $order_data['status'] = 'pending';
             $order_data['customer_id'] = auth()->user()->id;
+            $order_data['ref_no'] = $this->commonUtil->generateOrderRefNo($order_data['business_id']);
 
             $order = Order::create($order_data);
             
@@ -138,58 +144,6 @@ class OrderController extends Controller
             return $this->respondSuccess('Berhasil memesan', $order);
         } catch(\Exception $e) {
             return $this->respondFailed();
-        }
-    }
-
-    public function updateOrder(Request $request)
-    {
-        try {
-            // Get Last Active Order
-            $order = Order::where('customer_id', auth()->user()->id)
-                            ->where('status', 'activated')
-                            ->orderBy('created_at', 'DESC')
-                            ->firstOrFail();
-
-            $sell = Transaction::where('order_id', $order->id)->firstOrFail();
-
-            DB::beginTransaction();
-
-            $data_product = $request->input('products');
-            $products = [];
-            $total = 0;
-            foreach($data_product as $key => $product) {
-                $qty = $product['qty'];
-                $product = $this->commonUtil->getProductData($product['product_id'], $qty);
-                $total += ($product->sell_price * $qty);
-                $temp = [
-                    'business_id' => $sell->business_id,
-                    'transaction_id' => $sell->id,
-                    'product_id' => $product->id,
-                    'product' => $product->name,
-                    'qty' => $qty,
-                    'unit_price' => $product->sell_price
-                ];
-                $products[] = $temp;
-                TransactionProduct::create($temp);
-                $this->commonUtil->updateStockProduct($product->id, $qty, '-');
-            }
-
-            $sell->total = $sell->total + $total;
-            $sell->save();
-
-            DB::commit();
-            
-            $users = User::where('business_id', $order->business_id)->get();
-            $prefix = Business::find($order->business_id)->prefixes['table'];
-            $this->commonUtil->notify($users, 'new', 'order', [
-                'table' => $prefix ? $prefix.$order->table->name : $order->table->name
-            ]);
-
-            return $this->respondSuccess('Berhasil menambah pesanan', $products);
-        } catch(\Exception $e) {
-            DB::rollBack();
-            dd($e);
-            return $this->respondFailed('Tidak ada order aktif');
         }
     }
 
@@ -268,24 +222,33 @@ class OrderController extends Controller
 
             DB::beginTransaction();
 
-            $order->status = 'activated';
+            if($order->transaction_id) {
+                $transaction = Transaction::findOrFail($order->transaction_id);
+            } else {
+                $sell_data = [
+                    'business_id' => $order->business_id,
+                    'table_id' => $order->table_id,
+                    'customer_id' => $order->customer_id,
+                    'employee_id' => auth()->user()->id,
+                    'ref_no' => $this->commonUtil->generateTrxRefNo(),
+                    'type' => 'sells',
+                    'status' => 'active',
+                    'payment_status' => 'unpaid'
+                ];
+    
+                $transaction = Transaction::create($sell_data);
+                $order->transaction_id = $transaction->id;
+            }
+
+            $order->status = 'finish';
             $order->save();
 
-            $sell_data = [
-                'order_id' => $order->id,
-                'business_id' => $order->business_id,
-                'table_id' => $order->table_id,
-                'customer_id' => $order->customer_id,
-                'employee_id' => auth()->user()->id,
-                'ref_no' => $this->commonUtil->generateTrxRefNo(),
-                'type' => 'sells',
-                'status' => 'active',
-                'payment_status' => 'unpaid'
-            ];
-
-            $transaction = Transaction::create($sell_data);
             $products = [];
-            $total = 0;
+
+            if($transaction->total)
+                $total = $transaction->total;
+            else
+                $total = 0;
 
             $product_data = $order->products;
             foreach($product_data as $key => $product) {
@@ -321,6 +284,7 @@ class OrderController extends Controller
             return $this->respondSuccess('Berhasil melakukan transaksi penjualan', $transaction);
         } catch(\Exception $e) {
             DB::rollBack();
+            dd($e);
             return $this->respondFailed();
         }
     }
@@ -328,7 +292,7 @@ class OrderController extends Controller
     public function reject($id)
     {
         $order = Order::find($id);
-        $order->status = 'cencelled';
+        $order->status = 'cencel';
         $order->save();
 
         return $this->respondSuccess('Berhasil menolak pesanan', $order);

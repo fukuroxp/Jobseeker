@@ -8,6 +8,7 @@ use App\TransactionProduct;
 use App\Product;
 use App\Business;
 use App\User;
+use App\Order;
 
 use \Notification;
 use App\Notifications\CommonNotification;
@@ -45,7 +46,16 @@ class Util
                             })
                             ->count() + 1;
 
-        $prefix = auth()->user()->business->prefixes['stock_adjustment'];
+        $prefix = Business::find(auth()->user()->business_id)->prefixes['stock_adjustment'];
+
+        return $prefix.date('Y').'/'.str_pad($count, 4, '0', STR_PAD_LEFT);
+    }
+
+    public function generateOrderRefNo($business_id)
+    {
+        $count = Order::where('business_id', $business_id)
+                            ->count() + 1;
+        $prefix = Business::find($business_id)->prefixes['order'];
 
         return $prefix.date('Y').'/'.str_pad($count, 4, '0', STR_PAD_LEFT);
     }
@@ -55,7 +65,7 @@ class Util
         $count = Transaction::where('business_id', auth()->user()->business_id)
                             ->where('type', 'sells')
                             ->count() + 1;
-        $prefix = auth()->user()->business->prefixes['transaction'];
+        $prefix = Business::find(auth()->user()->business_id)->prefixes['transaction'];
 
         return $prefix.date('Y').'/'.str_pad($count, 4, '0', STR_PAD_LEFT);
     }
@@ -64,7 +74,7 @@ class Util
     {
         $count = TransactionPayment::where('business_id', auth()->user()->business_id)
                             ->count() + 1;
-        $prefix = auth()->user()->business->prefixes['transaction_payment'];
+        $prefix = Business::find(auth()->user()->business_id)->prefixes['transaction_payment'];
 
         return $prefix.date('Y').'/'.str_pad($count, 4, '0', STR_PAD_LEFT);
     }
@@ -91,6 +101,7 @@ class Util
             'employee_id' => $employee_id,
             'ref_no' => $this->generateStockRefNo(),
             'type' => $type,
+            'total' => $amount,
             'status' => 'finish',
             'payment_status' => 'paid'
         ]);

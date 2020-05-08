@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddOrderIdToTransaction extends Migration
+class AddAndRemoveOrderId extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddOrderIdToTransaction extends Migration
      */
     public function up()
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->unsignedBigInteger('order_id')->nullable();
-            $table->foreign('order_id')->references('id')->on('orders');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->unsignedBigInteger('transaction_id')->after('id')->nullable();
+            $table->foreign('transaction_id')->references('id')->on('transactions');
         });
     }
 

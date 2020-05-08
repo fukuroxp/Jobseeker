@@ -70,7 +70,8 @@ class BusinessController extends Controller
                     'sku' => 'PR',
                     'transaction' => 'TRX',
                     'transaction_payment' => 'TRP',
-                    'stock_adjustment' => 'SA'
+                    'stock_adjustment' => 'SA',
+                    'order' => 'OR'
                 ]
             ];
 

@@ -37,14 +37,24 @@ class SellController extends Controller
     {
         if(auth()->user()->hasRole('Customer')) {
             $data = Business::select(['id', 'name', 'address'])
+                            ->whereHas('transactions')
                             ->with(['transactions' => function($q) {
+                                $q->where('type', 'sells');
                                 $q->where('customer_id', auth()->user()->id);
+                                $q->with(['employee' => function($q) {
+                                    $q->select(['id', 'name']);
+                                }]);
                             }]);
         } else {
             $data = Transaction::where('type', 'sells')
-                            ->with(['business' => function($q) {
-                                $q->select(['id', 'name', 'address']);
-                            }])
+                            ->with([
+                                'business' => function($q) {
+                                    $q->select(['id', 'name', 'address']);
+                                },
+                                'employee' => function($q) {
+                                    $q->select(['id', 'name']);
+                                },
+                            ])
                             ->where('business_id', auth()->user()->business_id);
         }
 
@@ -69,7 +79,6 @@ class SellController extends Controller
                     $data[$business_id]['transactions'][$key]->transaction_date = strftime("%A, %d %B %Y", strtotime($value->created_at));
                     unset($data[$business_id]['transactions'][$key]->transaction_products);
                     $data[$business_id]['transactions'][$key]->products = $products;
-                    $data[$business_id]['transactions'][$key]->order_id = $data[$business_id]['transactions'][$key]->order_id ?? 0;
                 }
             }
         } else {
@@ -85,7 +94,6 @@ class SellController extends Controller
                 $data[$key]->transaction_date = strftime("%A, %d %B %Y", strtotime($value->created_at));
                 unset($data[$key]->transaction_products);
                 $data[$key]->products = $products;
-                $data[$key]->order_id = $data[$key]->order_id ?? 0;
             }
         }
 
@@ -276,7 +284,6 @@ class SellController extends Controller
             }
             unset($sell->transaction_products);
             $sell->products = $products;
-            $sell->order_id = $sell->order_id ?? 0;
             
             DB::commit();
             

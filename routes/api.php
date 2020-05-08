@@ -37,4 +37,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api', 'middleware' => ['jwt.veri
 
     Route::post('notify', 'HomeController@notify');
     Route::get('notifications', 'HomeController@loadMoreNotifications');
+
+    Route::get('user', 'UserController@index');
+    Route::put('user', 'UserController@update');
+    Route::put('user/password', 'UserController@updatePassword');
 });

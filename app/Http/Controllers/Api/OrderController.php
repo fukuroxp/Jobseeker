@@ -70,6 +70,11 @@ class OrderController extends Controller
         } else {
             $data = Order::where('business_id', auth()->user()->business_id)
                         ->where('status', 'pending')
+                        ->with([
+                            'business' => function($q) {
+                                $q->select(['id', 'name', 'address']);
+                            }
+                        ])
                         ->orderBy('created_at', 'DESC')
                         ->get();
 

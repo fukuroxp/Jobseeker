@@ -41,6 +41,7 @@ class SellController extends Controller
                             ->with(['transactions' => function($q) {
                                 $q->where('type', 'sells');
                                 $q->where('customer_id', auth()->user()->id);
+                                $q->orderBy('created_at', 'DESC');
                                 $q->with(['employee' => function($q) {
                                     $q->select(['id', 'name']);
                                 }]);
@@ -55,7 +56,12 @@ class SellController extends Controller
                                     $q->select(['id', 'name']);
                                 },
                             ])
-                            ->where('business_id', auth()->user()->business_id);
+                            ->where('business_id', auth()->user()->business_id)
+                            ->orderBy('created_at', 'DESC');
+
+            if(request()->input('status')) {
+                $data = $data->where('status', request()->input('status'));
+            }
         }
 
         $start = 0;

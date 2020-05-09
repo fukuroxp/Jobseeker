@@ -17,8 +17,8 @@
                 {!! Form::text('email', null, ['class' => 'form-control', 'required']) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('password', 'Password') !!}
-                {!! Form::password('password', ['class' => 'form-control', 'required']) !!}
+                {!! Form::label('password', 'PIN') !!}
+                {!! Form::password('password', ['class' => 'form-control', 'required', 'pattern' => '[0-9]*', 'minlength' => "6", 'inputmode' => 'numeric', 'oninvalid' => "this.setCustomValidity('Hanya boleh Numerik Min 6 digit')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
         </div>
         <div class="modal-footer">

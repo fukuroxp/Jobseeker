@@ -113,6 +113,35 @@ class AuthController extends Controller
         }
     }
 
+    public function forgot(Request $request)
+    {
+        $input = $request->all();
+        $rules = array(
+            'email' => "required|email",
+        );
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->fails()) {
+            return $this->respondFailed();
+        } else {
+            try {
+                $response = \Password::sendResetLink($request->only('email'), function (Message $message) {
+                    $message->subject('Password reset confirmation');
+                });
+                switch ($response) {
+                    case \Password::RESET_LINK_SENT:
+                        return $this->respondSuccess(trans($response));
+                    case \Password::INVALID_USER:
+                        return $this->respondFailed('User tidak ditemukan');
+                }
+            } catch (\Swift_TransportException $ex) {
+                return $this->respondFailed($ex->getMessage());
+            } catch (Exception $ex) {
+                return $this->respondFailed($ex->getMessage());
+            }
+        }
+    }
+
     public function getAuthenticatedUser()
     {
         try {

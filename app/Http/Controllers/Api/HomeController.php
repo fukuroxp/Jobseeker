@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use App\TransactionProduct;
 
 use App\Utils\Util;
 
@@ -18,13 +19,73 @@ class HomeController extends Controller
         $this->commonUtil = $commonUtil;
     }
 
+    public function report()
+    {
+        $profit['kotor'] = \DB::select(
+            '(SELECT 
+                SUM(
+                    IF(TP.type="credit", TP.amount, -1 * TP.amount)
+                ) as balance FROM transaction_payments AS TP
+                WHERE TP.business_id = '.auth()->user()->business_id.' AND
+                DATE(TP.created_at) = DATE(NOW())
+            )')[0]->balance ?? 0;
+
+        $sells = TransactionProduct::where('business_id', auth()->user()->business_id)
+                        ->where('type', 'sell')
+                        ->whereDate('created_at', '=', date('Y-m-d'))
+                        ->whereHas('transaction', function($q) {
+                            $q->where('payment_status', 'paid');
+                        })
+                        ->get();
+
+        $profit['bersih'] = 0;
+        $data = [];
+        foreach($sells as $key => $sell) {
+            $qty = $sell->qty;
+            $product = $sell->product()->first();
+            $sell_price = $sell->unit_price;
+            $purchase_price = $product->purchase_price;
+            $single_profit = $sell_price - $purchase_price;
+            $profit['bersih'] += ($single_profit * $qty);
+            $data[] = [
+                'product' => $sell->product,
+                'purchase_price' => $product->purchase_price,
+                'sell_price' => $sell->unit_price,
+                'qty' => $qty,
+                'profit' => ($single_profit * $qty),
+                'created_at' => $sell->created_at
+            ];
+        }
+
+        $response = [
+            'profit' => $profit,
+            'products' => $data
+        ];
+
+        return $this->respondSuccess('Berhasil', $response);
+    }
+
     public function notify()
     {
         $message = request()->input('message');
 
         if(!$message) return $this->respondFailed('Harap isi pesan');
+        
+        $lat = auth()->user()->lat;
+        $lng = auth()->user()->lng;
+        $radius = 25;
 
-        $users = User::role('Customer')->get();
+        $users = User::role('Customer');
+
+        if($lat && $lng) {
+            $users = $users->whereRaw( 
+                \DB::raw( "(3959 * acos( cos( radians($lat) ) * cos( radians( lat ) )  * cos( radians( lng ) - radians($lng) ) + sin( radians($lat) ) * sin( radians( lat ) ) ) ) < $radius ")
+            )
+            ->get();
+        } else {
+            $users = $users->get();
+        }
+
         $this->commonUtil->notify($users, 'add', 'promo', ['message' => $message]);
 
         return $this->respondSuccess('Berhasil mengirim notifikasi');

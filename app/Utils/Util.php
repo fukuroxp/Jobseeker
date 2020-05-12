@@ -10,6 +10,11 @@ use App\Business;
 use App\User;
 use App\Order;
 
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use FCM;
+
 use \Notification;
 use App\Notifications\CommonNotification;
 
@@ -175,8 +180,62 @@ class Util
 
     public function notify($target, $action = '', $type = '', $detail = [])
     {
+        $tokens = $target->pluck('fcm')->toArray();
+        if($tokens) {
+            $title = '';
+            $msg = '';
+            if ($type == 'promo') {
+                $title = 'Ada Promo Baru nih!';
+                $msg = $detail['message'];
+            } else if($type == 'stock') {
+                $title = 'Stok produk '.$detail['name'].' kosong';
+                $msg = 'Silahkan tambahkan stok';
+            } else if($type == 'order') {
+                if($action == 'new') {
+                    $title = 'Ada pesanan baru masuk';
+                    $msg = 'Pesanan baru dari meja '.$detail['table'];
+                } else if($action == 'sell') {
+                    $title = 'Penjualan '.$detail['ref_no'].' berhasil dilakukan';
+                    $msg = 'Penjualan pada meja '.$detail['table'].' sejumlah Rp '.$detail['total'].' berhasil dilakukan';
+                } else if($action == 'pay') {
+                    $title = 'Pembayaran berhasil dilakukan';
+                    $msg = 'Pembayaran pada penjualan '.$detail['ref_no'].' sejumlah Rp '.$detail['total'].' berhasil dibayarkan';
+                }
+            }
+            $this->sendFcmNotification($tokens, [
+                'title' => $title,
+                'contents' => $msg
+            ]);
+        }
+
         Notification::send($target, new CommonNotification($action, $type, $detail));
 
         return true;
+    }
+
+    public function sendFcmNotification($tokens, $notif, $data = [])
+    {
+        $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60*20);
+        
+        $notificationBuilder = new PayloadNotificationBuilder($notif['title']);
+        $notificationBuilder->setBody($notif['contents'])
+                            ->setColor('#e9622a')
+                            ->setSound('default');
+        
+        $dataBuilder = new PayloadDataBuilder();
+        $dataBuilder->addData($data);
+        
+        $option = $optionBuilder->build();
+        $notification = $notificationBuilder->build();
+        $data = $dataBuilder->build();
+        
+        $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
+        
+        $downstreamResponse->numberSuccess();
+        $downstreamResponse->numberFailure();
+        $downstreamResponse->numberModification();
+        
+        return $downstreamResponse;
     }
 }

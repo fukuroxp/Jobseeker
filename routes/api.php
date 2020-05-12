@@ -22,6 +22,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function () {
     Route::post('/login', 'AuthController@login');
     Route::post('/register', 'AuthController@register');
     Route::post('/logout', 'AuthController@logout');
+    Route::post('/forgot', 'AuthController@forgot');
 });
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api', 'middleware' => ['jwt.verify']], function () {
@@ -37,6 +38,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api', 'middleware' => ['jwt.veri
 
     Route::post('notify', 'HomeController@notify');
     Route::get('notifications', 'HomeController@loadMoreNotifications');
+    Route::get('report', 'HomeController@report');
 
     Route::get('user', 'UserController@index');
     Route::put('user', 'UserController@update');

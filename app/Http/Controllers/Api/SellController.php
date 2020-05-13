@@ -86,6 +86,9 @@ class SellController extends Controller
                     unset($data[$business_id]['transactions'][$key]->transaction_products);
                     $data[$business_id]['transactions'][$key]->products = $products;
                 }
+                if(count($business->transactions) == 0) {
+                    unset($data[$business_id]);
+                }
             }
         } else {
             foreach($data as $key => $value) {

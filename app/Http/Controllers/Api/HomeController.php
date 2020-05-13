@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use App\Transaction;
 use App\TransactionProduct;
 
 use App\Utils\Util;
@@ -30,7 +31,7 @@ class HomeController extends Controller
                 DATE(TP.created_at) = DATE(NOW())
             )')[0]->balance ?? 0;
 
-        $sells = TransactionProduct::where('business_id', auth()->user()->business_id)
+        $tp = TransactionProduct::where('business_id', auth()->user()->business_id)
                         ->where('type', 'sell')
                         ->whereDate('created_at', '=', date('Y-m-d'))
                         ->whereHas('transaction', function($q) {
@@ -40,7 +41,7 @@ class HomeController extends Controller
 
         $profit['bersih'] = 0;
         $data = [];
-        foreach($sells as $key => $sell) {
+        foreach($tp as $key => $sell) {
             $qty = $sell->qty;
             $product = $sell->product()->first();
             $sell_price = $sell->unit_price;
@@ -57,9 +58,26 @@ class HomeController extends Controller
             ];
         }
 
+        $sells = Transaction::where('type', 'sells')
+                        ->with([
+                            'business' => function($q) {
+                                $q->select(['id', 'name', 'address']);
+                            },
+                            'employee' => function($q) {
+                                $q->select(['id', 'name']);
+                            },
+                            'table' => function($q) {
+                                $q->select(['id', 'name']);
+                            },
+                        ])
+                        ->where('business_id', auth()->user()->business_id)
+                        ->whereDate('created_at', '=', date('Y-m-d'))
+                        ->orderBy('created_at', 'DESC')
+                        ->get();
+
         $response = [
             'profit' => $profit,
-            'products' => $data
+            'sells' => $sells
         ];
 
         return $this->respondSuccess('Berhasil', $response);

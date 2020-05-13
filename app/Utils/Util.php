@@ -248,7 +248,7 @@ class Util
             'headings' => array("en" => $title, "id" => $title),
             'isAnyWeb' => true,
             'small_icon' =>"ic_stat_onesignal_default",
-            'android_accent_color' => '2196F3',
+            'android_accent_color' => '7367F0',
             'contents' => $content
         );
 

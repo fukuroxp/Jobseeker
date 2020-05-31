@@ -77,6 +77,17 @@
     if($('.chat-user-list ul li').hasClass('active')){
       $('.start-chat-area').addClass('d-none');
       $('.active-chat').removeClass('d-none');
+      var vUrl = $(this).data().vUrl;
+      var vId = $(this).data().vId;
+      var html = '<video id="video" width="100%" height="100%" class="mb-1" controls autoplay>' +
+                    '<source src="' + vUrl + '" type="video/mp4">' +
+                    'Your browser does not support the video tag.' +
+                  '</video>' +
+                  '<script>' +
+                    '$("#video").bind("ended", function() {' +
+                      'markVideoAsWatched(' + vId + ')' +
+                    '});';
+      $('.video-container').html(html);
     }
     else{
       $('.start-chat-area').removeClass('d-none');
@@ -87,7 +98,7 @@
   // autoscroll to bottom of Chat area
   var chatContainer = $(".user-chats");
   $(".chat-users-list-wrapper li").on("click", function () {
-    chatContainer.animate({ scrollTop: chatContainer[0].scrollHeight }, 400)
+    // chatContainer.animate({ scrollTop: chatContainer[0].scrollHeight }, 400)
   });
 
   // Favorite star click

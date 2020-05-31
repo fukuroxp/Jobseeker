@@ -19,6 +19,7 @@
         "laravel/ui": "^2.0",
         "laravelcollective/html": "^6.1",
         "simplesoftwareio/simple-qrcode": "^2.0",
+        "spatie/laravel-activitylog": "^3.14",
         "spatie/laravel-permission": "^3.11",
         "tymon/jwt-auth": "dev-develop"
     },

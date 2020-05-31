@@ -24,21 +24,27 @@ Route::get('/test', function() {
     return view('home');
 });
 
-Route::resource('business', 'BusinessController');
-
 Route::group(['middleware' => 'auth'], function () {
-    Route::put('products/{id}/stock', 'ProductController@updateStock')->name('products.updateStock');
-    Route::resource('products', 'ProductController');
-    Route::post('settings/password', 'SettingController@updatePassword')->name('settings.updatePassword');
-    Route::resource('settings', 'SettingController');
     Route::resource('users', 'UserController');
-    Route::get('tables/print', 'TableController@print')->name('tables.print');
-    Route::resource('tables', 'TableController');
-    Route::resource('sells', 'SellController');
+    Route::resource('materi', 'MateriController');
+    Route::resource('video', 'VideoController');
+    Route::post('task/{id}/submit', 'TaskController@submit')->name('task.submit');
+    Route::resource('task', 'TaskController');
+    Route::resource('kelas', 'KelasController');
+    Route::post('soal/exam/answer', 'SoalController@storeAnswer')->name('soal.storeAnswer');
+    Route::post('soal/exam/finish', 'SoalController@examFinish')->name('soal.examFinish');
+    Route::post('soal/{id}/item', 'SoalController@storeItem')->name('soal.storeItem');
+    Route::post('soal/{id}/exam', 'SoalController@examStart')->name('soal.examStart');
+    Route::resource('soal', 'SoalController');
     Route::get('home/notifications', 'HomeController@loadMoreNotifications');
+    Route::post('home/feed', 'HomeController@feed')->name('home.feed');
+    Route::post('home/reply', 'HomeController@reply')->name('home.reply');
 
-    Route::group(['prefix' => 'reports'], function () {
-        Route::get('profit', 'ReportController@profit')->name('reports.profit');
-        Route::get('stock', 'ReportController@stock')->name('reports.stock');
-    });
+    Route::get('activity', 'ReportController@activity')->name('report.activity');
+    Route::post('nilai', 'ReportController@saveNilai')->name('report.saveNilai');
+    Route::get('nilai', 'ReportController@nilai')->name('report.nilai');
+
+    Route::get('setting', 'HomeController@setting')->name('home.setting');
+    Route::post('setting', 'HomeController@updateSetting')->name('home.updateSetting');
+    Route::post('password', 'HomeController@updatePassword')->name('home.updatePassword');
 });

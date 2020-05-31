@@ -2,7 +2,7 @@
     {!! Form::open(['url' => route('users.update', [$data->id]), 'method' => 'put']) !!}
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title" id="exampleModalLabel">Edit Karyawan</h5>
+            <h4 class="modal-title" id="exampleModalLabel">Edit {{ $role == 'mentor' ? 'Guru' : 'Siswa' }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -17,9 +17,15 @@
                 {!! Form::text('email', $data->email, ['class' => 'form-control', 'required']) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('password', 'PIN') !!}
-                {!! Form::password('password', ['class' => 'form-control', 'required', 'pattern' => '[0-9]*', 'minlength' => "6", 'inputmode' => 'numeric', 'oninvalid' => "this.setCustomValidity('Hanya boleh Numerik Min 6 digit')", 'oninput' => "this.setCustomValidity('')"]) !!}
+                {!! Form::label('password', 'Password') !!}
+                {!! Form::password('password', ['class' => 'form-control', 'minlength' => "6", 'oninvalid' => "this.setCustomValidity('Min 6 digit')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
+            <hr>
+            @if ($role == 'student')
+                @include('users.partials.form_student');
+            @else
+                @include('users.partials.form_mentor');
+            @endif
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Simpan</button>

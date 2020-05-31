@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\TransactionProduct;
+use App\Materi;
+use App\Video;
+use App\Feed;
+use App\FeedReply;
 
 use Illuminate\Http\Request;
 
@@ -25,32 +28,69 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $profit['kotor'] = \DB::select(
-            '(SELECT 
-                SUM(
-                    IF(TP.type="credit", TP.amount, -1 * TP.amount)
-                ) as balance FROM transaction_payments AS TP
-                WHERE TP.business_id = '.auth()->user()->business_id.'
-            )')[0]->balance;
+        $feeds = Feed::orderBy('created_at', 'desc')->get();
+        $materi = Materi::orderBy('created_at', 'desc')->take(5)->get();
+        $video = Video::orderBy('created_at', 'desc')->take(5)->get();
+        return view('home', compact('feeds', 'materi', 'video'));
+    }
 
-        $sells = TransactionProduct::where('business_id', auth()->user()->business_id)
-                        ->where('type', 'sell')
-                        ->whereHas('transaction', function($q) {
-                            $q->where('payment_status', 'paid');
-                        })
-                        ->get();
+    public function setting()
+    {
+        $data = auth()->user();
+        return view('setting.index', compact('data'));
+    }
 
-        $profit['bersih'] = 0;
-        foreach($sells as $key => $sell) {
-            $qty = $sell->qty;
-            $product = $sell->product()->first();
-            $sell_price = $sell->unit_price;
-            $purchase_price = $product->purchase_price;
-            $single_profit = $sell_price - $purchase_price;
-            $profit['bersih'] += ($single_profit * $qty);
+    public function updateSetting(Request $request)
+    {
+        $user = auth()->user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->nomor_induk = $request->nomor_induk;
+
+        if ($request->hasFile('image')) {
+            $user->image = time().'.'.request()->image->getClientOriginalExtension();
+            
+            request()->image->move(public_path('uploads/images/'), $user->image);
         }
 
-        return view('home', compact('profit'));
+        if($user->hasRole('student')) {
+            $user->ttl = $request->ttl;
+            $user->phone = $request->phone;
+        } else {
+            $user->jabatan = $request->jabatan;
+            $user->address = $request->address;
+        }
+
+        $user->save();
+
+        flash('Berhasil menyimpan pengaturan')->success();
+
+        return redirect()->route('home.setting');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        if($request->password != $request->con_password) {
+            flash('Konfirmasi password tidak sama')->error();
+            return redirect()->route('home.setting');
+        }
+
+        $credentials = [
+            'email' => auth()->user()->email,
+            'password' => $request->old_password
+        ];
+
+        if(!\Auth::attempt($credentials)) {
+            flash('Password lama anda salah')->error();
+            return redirect()->route('home.setting');
+        }
+
+        $user = auth()->user();
+        $user->password = \Hash::make($request->password);
+        $user->save();
+        
+        flash('Berhasil merubah password')->success();
+        return redirect()->route('home.setting');
     }
 
     public function loadMoreNotifications()
@@ -109,5 +149,25 @@ class HomeController extends Controller
         }
 
         return view('layouts.partials.notification_list', compact('notifications_data'));
+    }
+
+    public function feed(Request $request)
+    {
+        $input = $request->all();
+        $input['user_id'] = auth()->user()->id;
+
+        Feed::create($input);
+
+        return redirect()->route('home');
+    }
+
+    public function reply(Request $request)
+    {
+        $input = $request->all();
+        $input['user_id'] = auth()->user()->id;
+
+        FeedReply::create($input);
+
+        return redirect()->route('home');
     }
 }

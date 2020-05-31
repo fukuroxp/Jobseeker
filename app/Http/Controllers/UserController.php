@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Kelas;
 
 use Illuminate\Http\Request;
 
@@ -15,8 +16,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $data = User::where('business_id', auth()->user()->business_id)->get();
-        return view('users.index', compact('data'));
+        if(request()->type == 'student') {
+            $role = 'student';
+            $data = User::role('student')->get();
+        } else {
+            $role = 'mentor';
+            $data = User::role('mentor')->get();
+        }
+
+        return view('users.index', compact('data', 'role'));
     }
 
     /**
@@ -26,7 +34,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $kelas = Kelas::all()->pluck('name', 'id');
+        $role = request()->role;
+        $data = null;
+        return view('users.create', compact('role', 'kelas', 'data'));
     }
 
     /**
@@ -37,16 +48,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->except('_token');
-        $input['business_id'] = auth()->user()->business_id;
+        $input = $request->except(['_token', 'role']);
         $input['password'] = \Hash::make($input['password']);
 
+        $role = $request->role;
+
         $user = User::create($input);
-        $user->assignRole('Cashier#'.auth()->user()->business_id);
+        $user->assignRole($role);
 
         flash('Berhasil menambahkan user')->success();
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index', ['type' => $role]);
 
     }
 
@@ -70,7 +82,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $data = User::find($id);
-        return view('users.edit', compact('data'));
+        $role = $data->getRoleNames()[0];
+        $kelas = Kelas::all()->pluck('name', 'id');
+        return view('users.edit', compact('data', 'kelas', 'role'));
     }
 
     /**
@@ -82,18 +96,22 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $input = $request->except(['_token', 'role', 'password']);
+
         $user = User::find($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
+
+        $role = $user->getRoleNames()[0];
 
         if($request->input('password'))
             $user->password = \Hash::make($request->password);
 
         $user->save();
 
+        $user->update($input);
+
         flash('Berhasil mengubah user')->success();
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index', ['type' => $role]);
     }
 
     /**
@@ -109,12 +127,12 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Berhasil menghapus karyawan'
+                'message' => 'Berhasil menghapus user'
             ]);
         } catch(\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Gagal menghapus karyawan'
+                'message' => 'Gagal menghapus user'
             ]);
         }
     }

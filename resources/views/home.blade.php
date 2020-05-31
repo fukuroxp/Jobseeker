@@ -1,116 +1,151 @@
 @extends('layouts.app')
 
-@section('content')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/users.css') }}">
+@endsection
 
+@section('content')
 <div class="content-header row">
 </div>
 <div class="content-body">
-    <!-- Dashboard Ecommerce Starts -->
-    <section id="dashboard-ecommerce">
+    <div id="user-profile">
         <div class="row">
-            <div class="col-lg-3 col-sm-6 col-12">
-                <div class="card">
-                    <div class="card-header d-flex flex-column align-items-start pb-0">
-                        <div class="avatar bg-rgba-primary p-50 m-0">
-                            <div class="avatar-content">
-                                <i class="feather icon-users text-primary font-medium-5"></i>
+            <div class="col-12">
+                <div class="profile-header mb-2">
+                    <div class="relative">
+                        <div class="cover-container">
+                            <img class="img-fluid bg-cover rounded-0 w-100" src="https://bookcoverzone.com/img/hero-slider/xeducation_banner.jpg.pagespeed.ic.7PHyP9TH66.jpg" alt="User Profile Image">
+                        </div>
+                        <div class="profile-img-container d-flex align-items-center justify-content-between">
+                            <img style="background: white" src="{{ auth()->user()->image ? asset('uploads/images/'.auth()->user()->image) : asset('uploads/images/profile.png') }}" class="rounded-circle img-border box-shadow-1" alt="Card image">
+                            <div class="float-right">
+                                <a type="button" href="{{ route('home.setting') }}" class="btn btn-icon btn-icon rounded-circle btn-primary mr-1">
+                                    <i class="feather icon-edit-2 text-white"></i>
+                                </a>
                             </div>
                         </div>
-                        <h2 class="text-bold-700 mt-1">92.6k</h2>
-                        <p class="mb-0">Subscribers Gained</p>
                     </div>
-                    <div class="card-content">
-                        <div id="line-area-chart-1"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6 col-12">
-                <div class="card">
-                    <div class="card-header d-flex flex-column align-items-start pb-0">
-                        <div class="avatar bg-rgba-success p-50 m-0">
-                            <div class="avatar-content">
-                                <i class="feather icon-credit-card text-success font-medium-5"></i>
-                            </div>
-                        </div>
-                        <h2 class="text-bold-700 mt-1">97.5k</h2>
-                        <p class="mb-0">Revenue Generated</p>
-                    </div>
-                    <div class="card-content">
-                        <div id="line-area-chart-2"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6 col-12">
-                <div class="card">
-                    <div class="card-header d-flex flex-column align-items-start pb-0">
-                        <div class="avatar bg-rgba-danger p-50 m-0">
-                            <div class="avatar-content">
-                                <i class="feather icon-shopping-cart text-danger font-medium-5"></i>
-                            </div>
-                        </div>
-                        <h2 class="text-bold-700 mt-1">36%</h2>
-                        <p class="mb-0">Quarterly Sales</p>
-                    </div>
-                    <div class="card-content">
-                        <div id="line-area-chart-3"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6 col-12">
-                <div class="card">
-                    <div class="card-header d-flex flex-column align-items-start pb-0">
-                        <div class="avatar bg-rgba-warning p-50 m-0">
-                            <div class="avatar-content">
-                                <i class="feather icon-package text-warning font-medium-5"></i>
-                            </div>
-                        </div>
-                        <h2 class="text-bold-700 mt-1">97.5K</h2>
-                        <p class="mb-0">Orders Received</p>
-                    </div>
-                    <div class="card-content">
-                        <div id="line-area-chart-4"></div>
+                    <div class="d-flex justify-content-center mt-1 mb-0">
+                        <nav>
+                            <h5>{{ auth()->user()->name }}</h5>
+                        </nav>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-end">
-                        <h4 class="card-title">Pendapatan</h4>
-                        <p class="font-medium-5 mb-0"><i class="feather icon-settings text-muted cursor-pointer"></i></p>
+        <section id="profile-info">
+            <div class="row">
+                <div class="col-lg-9 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            {!! Form::open(['url' => route('home.feed'), 'method' => 'post']) !!}
+                            <fieldset class="form-label-group mb-50">
+                                <textarea name="message" class="form-control" id="label-textarea" rows="3" placeholder="Apa yang anda pikirkan?"></textarea>
+                                <label for="label-textarea">Apa yang anda pikirkan?</label>
+                            </fieldset>
+                            <button type="submit" class="btn btn-sm btn-primary">Kirim</button>
+                            {!! Form::close() !!}
+                        </div>
                     </div>
-                    <div class="card-content">
-                        <div class="card-body pb-0">
-                            <div class="d-flex justify-content-start">
-                                <div class="mr-2">
-                                    <p class="mb-50 text-bold-600">Laba Bersih</p>
-                                    <h2 class="text-bold-400">
-                                        <sup class="font-medium-1">Rp</sup>
-                                        <span class="text-success">{{ number_format($profit['bersih'], 2, ',' , '.') }}</span>
-                                    </h2>
+                    @foreach ($feeds as $value)
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-start align-items-center mb-1">
+                                <div class="avatar mr-1">
+                                    <img src="{{ $value->user->image ? asset('uploads/images/'.$value->user->image) : asset('uploads/images/profile.png') }}" alt="avtar img holder" height="45" width="45">
                                 </div>
+                                <div class="user-page-info">
+                                    <p class="mb-0">{{ $value->user->name }}</p>
+                                    <span class="font-small-2">{{ date('d M Y H:i', strtotime($value->created_at)) }}</span>
+                                </div>
+                            </div>
+                            <p>{{ $value->message }}</p>
+                            <div class="d-flex justify-content-start align-items-center mb-1">
                                 <div>
-                                    <p class="mb-50 text-bold-600">Laba Kotor</p>
-                                    <h2 class="text-bold-400">
-                                        <sup class="font-medium-1">Rp</sup>
-                                        <span>{{ number_format($profit['kotor'], 2, ',' , '.') }}</span>
-                                    </h2>
+                                    <b>Komentar</b>
                                 </div>
-
+                                <p class="ml-auto d-flex align-items-center">
+                                    <i class="feather icon-message-square font-medium-2 mr-50"></i>{{ count($value->replies) }}
+                                </p>
                             </div>
-                            <div id="revenue-chart"></div>
+                            @foreach ($value->replies as $reply)
+                                <div class="d-flex justify-content-start align-items-center mb-1">
+                                    <div class="avatar mr-50">
+                                        <img src="{{ $reply->user->image ? asset('uploads/images/'.$reply->user->image) : asset('uploads/images/profile.png') }}" alt="Avatar" height="30" width="30">
+                                    </div>
+                                    <div class="user-page-info">
+                                        <h6 class="mb-0">{{ $reply->user->name }}</h6>
+                                        <span class="font-small-2">{{ $reply->message }}</span>
+                                    </div>
+                                    <div class="ml-auto cursor-pointer">
+                                        <span class="font-small-2">{{ $reply->created_at->diffForHumans() }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                            {!! Form::open(['url' => route('home.reply'), 'method' => 'post']) !!}
+                            {!! Form::hidden('feed_id', $value->id) !!}
+                            <fieldset class="form-label-group mb-50">
+                                <textarea name="message" class="form-control" id="label-textarea" rows="1" placeholder="Tulis Komentar"></textarea>
+                                <label for="label-textarea">Tulis Komentar</label>
+                            </fieldset>
+                            <button type="submit" class="btn btn-sm btn-primary">Kirim</button>
+                            {!! Form::close() !!}
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="col-lg-3 col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <h4>Materi Terbaru</h4>
+                        </div>
+                        <div class="card-body">
+                            @foreach ($materi as $value)
+                                <div class="d-flex justify-content-start align-items-center mb-1">
+                                    <div class="user-page-info">
+                                        <h6 class="mb-0">{{ $value->name }}</h6>
+                                        <span class="font-small-2">{{ $value->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    <button type="button" data-href="{{ route('materi.show', [$value->id]) }}" class="btn btn-primary btn-icon ml-auto action-show"><i class="fa fa-download"></i></button>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <h4>Vidio Terbaru</h4>
+                        </div>
+                        <div class="card-body">
+                            @foreach ($video as $value)
+                                <div class="d-flex justify-content-start align-items-center mb-1">
+                                    <div class="user-page-info">
+                                        <h6 class="mb-0">{{ $value->name }}</h6>
+                                        <span class="font-small-2">{{ $value->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    <a type="button" href="{{ route('video.index') }}" class="btn btn-primary btn-icon ml-auto text-white"><i class="fa fa-play-circle"></i></a>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- Dashboard Ecommerce ends -->
-
+        </section>
+    </div>
 </div>
 @endsection
 
 @section('js')
-    <script src="{{ asset('app-assets/js/scripts/pages/dashboard-ecommerce.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/pages/user-profile.js') }}"></script>
+    <script>
+        $('.action-show').on("click",function(e){
+            e.stopPropagation();
+            $.ajax({
+                url: $(this).data('href'),
+                dataType: "json",
+                success: function(data) {
+                    window.open('uploads/file/'+data.file,'_blank');
+                }
+            })
+        });
+    </script>
 @endsection

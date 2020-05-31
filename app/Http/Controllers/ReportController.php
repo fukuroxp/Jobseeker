@@ -2,65 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\TransactionProduct;
-use App\TransactionPayment;
+use App\User;
 
 use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
 class ReportController extends Controller
 {
-    public function profit()
+    public function activity()
     {
-        $profit['kotor'] = \DB::select(
-            '(SELECT 
-                SUM(
-                    IF(TP.type="credit", TP.amount, -1 * TP.amount)
-                ) as balance FROM transaction_payments AS TP
-                WHERE TP.business_id = '.auth()->user()->business_id.'
-            )')[0]->balance;
-
-        $sells = TransactionProduct::where('business_id', auth()->user()->business_id)
-                        ->where('type', 'sell')
-                        ->whereHas('transaction', function($q) {
-                            $q->where('payment_status', 'paid');
-                        })
-                        ->get();
-
-        $profit['bersih'] = 0;
-        $data = [];
-        foreach($sells as $key => $sell) {
-            $qty = $sell->qty;
-            $product = $sell->product()->first();
-            $sell_price = $sell->unit_price;
-            $purchase_price = $product->purchase_price;
-            $single_profit = $sell_price - $purchase_price;
-            $profit['bersih'] += ($single_profit * $qty);
-            $data[] = [
-                'product' => $sell->product,
-                'purchase_price' => $product->purchase_price,
-                'sell_price' => $sell->unit_price,
-                'qty' => $qty,
-                'profit' => ($single_profit * $qty),
-                'created_at' => $sell->created_at
-            ];
-        }
-
-        return view('report.profit', compact('profit', 'data'));
+        $data = Activity::all();
+        return view('report.activity', compact('data'));
     }
 
-    public function stock()
+    public function nilai()
     {
-        $data = TransactionPayment::where('business_id', auth()->user()->business_id)
-                        ->where(function($q) {
-                            $q->whereHas('transaction', function($qt) {
-                                $qt->where('type', 'opening_stock');
-                            });
-                            $q->orWhereHas('transaction', function($qt) {
-                                $qt->where('type', 'stock_adjustment');
-                            });
-                        })
-                        ->get();
+        $data = User::role('student')->get();
+        
+        if(auth()->user()->hasRole('student'))
+            $data = [auth()->user()];
 
-        return view('report.stock', compact('data'));
+        return view('report.nilai', compact('data'));
+    }
+
+    public function saveNilai()
+    {
+        try {
+            $input = request()->all();
+
+            $user = User::find($input['id']);
+            
+            $nilai = json_decode($user->nilai, TRUE);
+            $nilai[$input['index']] = $input['nilai'];
+
+            $user->nilai = json_encode($nilai);
+            $user->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil menyimpan nilai',
+                'exam_id' => $exam->id
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menyimpan nilai'
+            ]);
+        }
     }
 }

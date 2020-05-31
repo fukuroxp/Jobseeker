@@ -18,11 +18,8 @@
                         @include('flash::message')
                         <div class="card-content">
                             <div class="card-body pt-1">
-                                <form action="{{ route('business.store') }}" method="POST">
+                                <form action="{{ route('register') }}" method="POST">
                                     @csrf
-                                    <div class="divider">
-                                        <div class="divider-text">Owner Information</div>
-                                    </div>
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
                                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Name" required>
                                         <div class="form-control-position">
@@ -60,40 +57,53 @@
                                             </span>
                                         @enderror
                                     </fieldset>
-                                    <div class="divider">
-                                        <div class="divider-text">Business Information</div>
-                                    </div>
+                                    <hr>
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="text" class="form-control @error('business_name') is-invalid @enderror" id="business_name" name="business_name" placeholder="Business Name" required>
+                                        <input type="text" class="form-control @error('nomor_induk') is-invalid @enderror" id="nomor_induk" name="nomor_induk" placeholder="NIS" required>
                                         <div class="form-control-position">
-                                            <i class="fa fa-shopping-bag"></i>
+                                            <i class="feather icon-user"></i>
                                         </div>
-                                        <label for="business_name">Business Name</label>
-                                        @error('business_name')
+                                        <label for="nomor_induk">NIS</label>
+                                        @error('nomor_induk')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </fieldset>
+                                    @php
+                                        $kelas = \App\Kelas::all()->pluck('name', 'id');
+                                    @endphp
+                                    <fieldset class="form-label-group form-group position-relative has-icon-left">
+                                        {!! Form::select('kelas_id', $kelas, null, ['class' => 'form-control', 'required']) !!}
+                                        <div class="form-control-position">
+                                            <i class="feather icon-briefcase"></i>
+                                        </div>
+                                        {!! Form::label('kelas_id', 'Kelas') !!}
+                                        @error('kelas_id')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </fieldset>
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="number" class="form-control @error('business_phone') is-invalid @enderror" id="business_phone" name="business_phone" placeholder="Business Phone" required>
+                                        <input type="text" class="form-control @error('ttl') is-invalid @enderror" id="ttl" name="ttl" placeholder="Surabaya, 9 September 1999" required>
                                         <div class="form-control-position">
-                                            <i class="fa fa-phone"></i>
+                                            <i class="feather icon-calendar"></i>
                                         </div>
-                                        <label for="business_phone">Business Phone</label>
-                                        @error('business_phone')
+                                        <label for="ttl">Tempat, Tgl Lahir</label>
+                                        @error('ttl')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </fieldset>
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="text" class="form-control @error('business_address') is-invalid @enderror" id="business_address" name="business_address" placeholder="Business Address" required>
+                                        <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="0822222222" required>
                                         <div class="form-control-position">
-                                            <i class="fa fa-map-marker"></i>
+                                            <i class="feather icon-smartphone"></i>
                                         </div>
-                                        <label for="business_address">Business Address</label>
-                                        @error('business_address')
+                                        <label for="phone">No. HP</label>
+                                        @error('phone')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>

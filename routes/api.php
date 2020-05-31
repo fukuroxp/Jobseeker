@@ -18,29 +18,3 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function () {
-    Route::post('/login', 'AuthController@login');
-    Route::post('/register', 'AuthController@register');
-    Route::post('/logout', 'AuthController@logout');
-    Route::post('/forgot', 'AuthController@forgot');
-});
-
-Route::group(['prefix' => 'v1', 'namespace' => 'Api', 'middleware' => ['jwt.verify']], function () {
-    Route::post('sells/{id}/pay', 'SellController@pay');
-    Route::get('sells/products', 'SellController@getProductSuggestion');
-    Route::apiResource('sells', 'SellController');
-
-    Route::get('orders/products/{business_id}', 'OrderController@getProductSuggestion');
-    Route::post('orders/{id}/accept', 'OrderController@accept');
-    Route::post('orders/{id}/reject', 'OrderController@reject');
-    Route::put('orders', 'OrderController@updateOrder');
-    Route::apiResource('orders', 'OrderController');
-
-    Route::post('notify', 'HomeController@notify');
-    Route::get('notifications', 'HomeController@loadMoreNotifications');
-    Route::get('report', 'HomeController@report');
-
-    Route::get('user', 'UserController@index');
-    Route::put('user', 'UserController@update');
-    Route::put('user/password', 'UserController@updatePassword');
-});

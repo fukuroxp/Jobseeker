@@ -29,12 +29,6 @@
                             Keamanan
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex py-75" id="account-pill-info" data-toggle="pill" href="#account-vertical-info" aria-expanded="false">
-                            <i class="fa fa-shopping-bag mr-50 font-medium-3"></i>
-                            Bisnis
-                        </a>
-                    </li>
                 </ul>
             </div>
             <!-- right content section -->
@@ -44,32 +38,55 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="account-vertical-general" aria-labelledby="account-pill-general" aria-expanded="true">
-                                    {!! Form::open(['url' => route('settings.store'), 'method' => 'post']) !!}
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        {!! Form::label('name', 'Nama') !!}
-                                                        {!! Form::text('name', $user->name, ['class' => 'form-control', 'required']) !!}
-                                                    </div>
-                                                </div>
+                                    {!! Form::open(['url' => route('home.updateSetting'), 'method' => 'post', 'files' => true]) !!}
+                                    <div class="media">
+                                        <a href="javascript: void(0);">
+                                            <img src="{{ $data->image ? asset('uploads/images/'.$data->image) : asset('uploads/images/profile.png') }}" class="rounded mr-75" alt="profile image" height="64" width="64">
+                                        </a>
+                                        <div class="media-body mt-75">
+                                            <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
+                                                <label class="btn btn-sm btn-primary ml-50 mb-50 mb-sm-0 cursor-pointer" for="account-upload">Upload new photo</label>
+                                                <input type="file" name="image" id="account-upload" hidden="">
                                             </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        {!! Form::label('email', 'Email') !!}
-                                                        {!! Form::text('email', $user->email, ['class' => 'form-control', 'required']) !!}
-                                                    </div>
+                                            <p class="text-muted ml-75 mt-50"><small>Allowed JPG, GIF or PNG. Max
+                                                    size of
+                                                    800kB</small></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    {!! Form::label('name', 'Nama') !!}
+                                                    {!! Form::text('name', $data->name, ['class' => 'form-control', 'required']) !!}
                                                 </div>
-                                            </div>
-                                            <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                <button type="submit" class="btn btn-primary mr-sm-1 mb-1 mb-sm-0">Simpan</button>
                                             </div>
                                         </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    {!! Form::label('email', 'Email') !!}
+                                                    {!! Form::text('email', $data->email, ['class' => 'form-control', 'required']) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <hr>
+                                        </div>
+                                        @if ($data->hasRole('student'))
+                                            @include('setting.partials.student');
+                                        @else
+                                            @include('setting.partials.mentor');
+                                        @endif
+                                        <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
+                                            <button type="submit" class="btn btn-primary mr-sm-1 mb-1 mb-sm-0">Simpan</button>
+                                        </div>
+                                    </div>
                                     {!! Form::close() !!}
                                 </div>
                                 <div class="tab-pane fade " id="account-vertical-password" role="tabpanel" aria-labelledby="account-pill-password" aria-expanded="false">
-                                    {!! Form::open(['url' => route('settings.updatePassword'), 'method' => 'post']) !!}
+                                    {!! Form::open(['url' => route('home.updatePassword'), 'method' => 'post']) !!}
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
@@ -103,68 +120,6 @@
                                             </div>
                                         </div>
                                     {!! Form::close() !!}
-                                </div>
-                                <div class="tab-pane fade" id="account-vertical-info" role="tabpanel" aria-labelledby="account-pill-info" aria-expanded="false">
-                                    <div class="media">
-                                        <a href="javascript: void(0);">
-                                            <img src="{{ asset('uploads/images/'.$business->image) }}" class="rounded mr-75" alt="profile image" height="64" width="64">
-                                        </a>
-                                        <div class="media-body mt-75">
-                                            <div class="col-12 px-0 d-flex flex-sm-row flex-column justify-content-start">
-                                                <label class="btn btn-sm btn-primary ml-50 mb-50 mb-sm-0 cursor-pointer" for="account-upload">Upload new photo</label>
-                                            </div>
-                                            <p class="text-muted ml-75 mt-50"><small>Allowed JPG, GIF or PNG.</small></p>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    {!! Form::open(['url' => route('settings.update', [$business->id]), 'method' => 'post', 'files' => true]) !!}
-                                    @method('PUT')    
-                                    <input type="file" name="image" id="account-upload" hidden>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! Form::label('name', 'Nama Bisnis') !!}
-                                                    {!! Form::text('name', $business->name, ['class' => 'form-control', 'required']) !!}
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! Form::label('phone', 'Nomor HP') !!}
-                                                    {!! Form::number('phone', $business->phone, ['class' => 'form-control', 'required']) !!}
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! Form::label('address', 'Alamat') !!}
-                                                    {!! Form::text('address', $business->address, ['class' => 'form-control', 'required']) !!}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="divider">
-                                            <div class="divider-text">Prefix</div>
-                                        </div>
-                                        <div class="row">
-                                            @foreach ($business->prefixes as $key => $item)
-                                            @php
-                                                if(strpos($key, '_'))
-                                                    $label = str_replace('_', ' ', $key);
-
-                                                $label = strtoupper($key);
-                                            @endphp
-                                                <div class="form-group col">
-                                                    {!! Form::label('prefixes', $label) !!}
-                                                    {!! Form::text('prefixes['.$key.']', $item, ['id' => 'prefixes', 'class' => 'form-control']) !!}
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                <button type="submit" class="btn btn-primary mr-sm-1 mb-1 mb-sm-0">Save
-                                                    changes</button>
-                                                <button type="reset" class="btn btn-outline-warning">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>

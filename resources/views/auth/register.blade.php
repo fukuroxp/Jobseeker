@@ -116,7 +116,7 @@
                         </div>
                         <div class="login-footer">
                             <div class="divider">
-                                <div class="divider-text">Copyright &copy; 2020 Runup Studio</div>
+                                <div class="divider-text">Copyright &copy; 2020</div>
                             </div>
                         </div>
                     </div>

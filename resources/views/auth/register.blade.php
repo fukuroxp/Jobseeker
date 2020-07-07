@@ -21,7 +21,10 @@
                                 <form action="{{ route('register') }}" method="POST">
                                     @csrf
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Name" required>
+                                        <input 
+                                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                            oninput="this.setCustomValidity('')"
+                                            type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Name" required>
                                         <div class="form-control-position">
                                             <i class="feather icon-user"></i>
                                         </div>
@@ -33,7 +36,10 @@
                                         @enderror
                                     </fieldset>
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="user-name" name="email" placeholder="Email" required>
+                                        <input 
+                                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                            oninput="this.setCustomValidity('')"
+                                            type="email" class="form-control @error('email') is-invalid @enderror" id="user-name" name="email" placeholder="Email" required>
                                         <div class="form-control-position">
                                             <i class="fa fa-envelope"></i>
                                         </div>
@@ -46,7 +52,10 @@
                                     </fieldset>
 
                                     <fieldset class="form-label-group position-relative has-icon-left">
-                                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="user-password" name="password" placeholder="Password" required>
+                                        <input 
+                                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                            oninput="this.setCustomValidity('')"
+                                            type="password" class="form-control @error('password') is-invalid @enderror" id="user-password" name="password" placeholder="Password" required>
                                         <div class="form-control-position">
                                             <i class="feather icon-lock"></i>
                                         </div>
@@ -59,7 +68,10 @@
                                     </fieldset>
                                     <hr>
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="text" class="form-control @error('nomor_induk') is-invalid @enderror" id="nomor_induk" name="nomor_induk" placeholder="NIS" required>
+                                        <input 
+                                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                            oninput="this.setCustomValidity('')"
+                                            type="text" class="form-control @error('nomor_induk') is-invalid @enderror" id="nomor_induk" name="nomor_induk" placeholder="NIS" required>
                                         <div class="form-control-position">
                                             <i class="feather icon-user"></i>
                                         </div>
@@ -86,7 +98,10 @@
                                         @enderror
                                     </fieldset>
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="text" class="form-control @error('ttl') is-invalid @enderror" id="ttl" name="ttl" placeholder="Surabaya, 9 September 1999" required>
+                                        <input 
+                                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                            oninput="this.setCustomValidity('')"
+                                            type="text" class="form-control @error('ttl') is-invalid @enderror" id="ttl" name="ttl" placeholder="Surabaya, 9 September 1999" required>
                                         <div class="form-control-position">
                                             <i class="feather icon-calendar"></i>
                                         </div>
@@ -98,7 +113,10 @@
                                         @enderror
                                     </fieldset>
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="0822222222" required>
+                                        <input 
+                                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                            oninput="this.setCustomValidity('')"
+                                            type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="0822222222" required>
                                         <div class="form-control-position">
                                             <i class="feather icon-smartphone"></i>
                                         </div>

@@ -15,13 +15,16 @@
                                 <h4 class="mb-0">Login</h4>
                             </div>
                         </div>
-                        <p class="px-2">Welcome back, please login to your account.</p>
+                        <p class="px-2">*untuk siswa password menggunakan nomor induk</p>
                         <div class="card-content">
                             <div class="card-body pt-1">
                                 <form action="{{ route('login') }}" method="POST">
                                     @csrf
                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="user-name" name="email" placeholder="Email" required>
+                                        <input 
+                                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                            oninput="this.setCustomValidity('')"
+                                            type="email" class="form-control @error('email') is-invalid @enderror" id="user-name" name="email" placeholder="Email" required>
                                         <div class="form-control-position">
                                             <i class="feather icon-user"></i>
                                         </div>
@@ -34,7 +37,10 @@
                                     </fieldset>
 
                                     <fieldset class="form-label-group position-relative has-icon-left">
-                                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="user-password" name="password" placeholder="Password" required>
+                                        <input 
+                                            oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
+                                            oninput="this.setCustomValidity('')"
+                                            type="password" class="form-control @error('password') is-invalid @enderror" id="user-password" name="password" placeholder="Password" required>
                                         <div class="form-control-position">
                                             <i class="feather icon-lock"></i>
                                         </div>
@@ -75,6 +81,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-xl-8 col-11 d-flex justify-content-center m-0" style="height: 1px">
+        <h1 class="text-white">Selamat Datang di Web Pembelajaran Kelas XI Multimedia</h1>
     </div>
 </section>
 

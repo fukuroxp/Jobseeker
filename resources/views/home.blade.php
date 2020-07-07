@@ -14,7 +14,7 @@
                 <div class="profile-header mb-2">
                     <div class="relative">
                         <div class="cover-container">
-                            <img class="img-fluid bg-cover rounded-0 w-100" src="https://bookcoverzone.com/img/hero-slider/xeducation_banner.jpg.pagespeed.ic.7PHyP9TH66.jpg" alt="User Profile Image">
+                            <img class="img-fluid bg-cover rounded-0 w-100" style="height: 30rem" src="{{ asset('assets/images/3.jpg') }}" alt="User Profile Image">
                         </div>
                         <div class="profile-img-container d-flex align-items-center justify-content-between">
                             <img style="background: white" src="{{ auth()->user()->image ? asset('uploads/images/'.auth()->user()->image) : asset('uploads/images/profile.png') }}" class="rounded-circle img-border box-shadow-1" alt="Card image">
@@ -38,10 +38,13 @@
                 <div class="col-lg-9 col-12">
                     <div class="card">
                         <div class="card-body">
-                            {!! Form::open(['url' => route('home.feed'), 'method' => 'post']) !!}
+                            {!! Form::open(['url' => route('home.feed'), 'method' => 'post', 'files' => true]) !!}
                             <fieldset class="form-label-group mb-50">
                                 <textarea name="message" class="form-control" id="label-textarea" rows="3" placeholder="Apa yang anda pikirkan?"></textarea>
                                 <label for="label-textarea">Apa yang anda pikirkan?</label>
+                            </fieldset>
+                            <fieldset class="form-label-group mb-50">
+                                <input type="file" accept="image/*" name="image" class="form-control">
                             </fieldset>
                             <button type="submit" class="btn btn-sm btn-primary">Kirim</button>
                             {!! Form::close() !!}
@@ -60,6 +63,9 @@
                                 </div>
                             </div>
                             <p>{{ $value->message }}</p>
+                            @if ($value->image)
+                            <img class="img-fluid card-img-top rounded-sm mb-2" src="{{ asset('uploads/images/'.$value->image) }}" alt="avtar img holder">
+                            @endif
                             <div class="d-flex justify-content-start align-items-center mb-1">
                                 <div>
                                     <b>Komentar</b>

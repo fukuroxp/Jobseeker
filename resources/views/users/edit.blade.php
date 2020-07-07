@@ -10,11 +10,11 @@
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('name', 'Nama') !!}
-                {!! Form::text('name', $data->name, ['class' => 'form-control', 'required']) !!}
+                {!! Form::text('name', $data->name, ['class' => 'form-control', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('email', 'Email') !!}
-                {!! Form::text('email', $data->email, ['class' => 'form-control', 'required']) !!}
+                {!! Form::text('email', $data->email, ['class' => 'form-control', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('password', 'Password') !!}

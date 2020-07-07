@@ -10,15 +10,15 @@
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('name', 'Judul') !!}
-                {!! Form::text('name', null, ['class' => 'form-control', 'required']) !!}
+                {!! Form::text('name', null, ['class' => 'form-control', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('description', 'Deskripsi') !!}
-                {!! Form::textarea('description', null, ['class' => 'form-control', 'required']) !!}
+                {!! Form::textarea('description', null, ['class' => 'form-control', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('file', 'File') !!}
-                {!! Form::file('file', null, ['class' => 'form-control-file', 'required']) !!}
+                {!! Form::file('file', null, ['class' => 'form-control-file', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
         </div>
         <div class="modal-footer">

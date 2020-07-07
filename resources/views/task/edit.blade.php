@@ -11,11 +11,11 @@
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('name', 'Judul') !!}
-                {!! Form::text('name', $data->name, ['class' => 'form-control', 'required']) !!}
+                {!! Form::text('name', $data->name, ['class' => 'form-control', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('description', 'Deskripsi') !!}
-                {!! Form::textarea('description', $data->description, ['class' => 'form-control', 'required']) !!}
+                {!! Form::textarea('description', $data->description, ['class' => 'form-control', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('label', 'Tugas') !!}
@@ -24,15 +24,15 @@
                     'Tugas 2' => 'Tugas 2',
                     'Tugas 3' => 'Tugas 3',
                     'Tugas 4' => 'Tugas 4',
-                ], $data->label, ['class' => 'form-control', 'required']) !!}
+                ], $data->label, ['class' => 'form-control', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('due_at', 'Deadline') !!}
-                {!! Form::text('due_at', $data->due_at, ['class' => 'form-control pickadate', 'required']) !!}
+                {!! Form::text('due_at', $data->due_at, ['class' => 'form-control pickadate', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('file', 'File') !!}
-                {!! Form::file('file', null, ['class' => 'form-control-file', 'required']) !!}
+                {!! Form::file('file', null, ['class' => 'form-control-file', 'required', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
         </div>
         <div class="modal-footer">

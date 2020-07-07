@@ -156,6 +156,12 @@ class HomeController extends Controller
         $input = $request->all();
         $input['user_id'] = auth()->user()->id;
 
+        if ($request->hasFile('image')) {
+            $input['image'] = time().'_'.request()->image->getClientOriginalName();
+            
+            request()->image->move(public_path('uploads/images/'), $input['image']);
+        }
+
         Feed::create($input);
 
         return redirect()->route('home');

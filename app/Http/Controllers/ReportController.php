@@ -40,8 +40,7 @@ class ReportController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Berhasil menyimpan nilai',
-                'exam_id' => $exam->id
+                'message' => 'Berhasil menyimpan nilai'
             ]);
         } catch(\Exception $e) {
             return response()->json([

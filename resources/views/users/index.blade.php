@@ -56,7 +56,7 @@
             })
         })
 
-        $('.action-delete').on("click", function(e){
+        $('.datatable').on('click', '.action-delete', function(e){
             var btn = $(this);
             e.stopPropagation();
             Swal.fire({

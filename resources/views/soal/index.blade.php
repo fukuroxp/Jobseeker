@@ -66,7 +66,7 @@
     <script>
         $('.datatable').DataTable();
 
-        $('.btn-modal').on('click', function(e){
+        $('.datatable').on('click', '.btn-modal', function(e){
             var t = $('.action-modal');
             $.ajax({
                 url: $(this).data('href'),
@@ -77,7 +77,7 @@
             })
         })
 
-        $('.action-delete').on("click", function(e){
+        $('.datatable').on('click', '.action-delete', function(e){
             var btn = $(this);
             e.stopPropagation();
             Swal.fire({

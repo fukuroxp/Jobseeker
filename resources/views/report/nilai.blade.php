@@ -19,7 +19,7 @@
                     <div class="card-content">
                         <div class="card-body card-dashboard">
                             <div class="table-responsive">
-                                <table class="table table-striped datatable">
+                                <table id="table-nilai" class="table table-striped datatable">
                                     <thead>
                                         <tr>
                                             <th>NIS</th>
@@ -80,7 +80,7 @@
         });
 
         @if(!auth()->user()->hasRole('student'))
-        $("input").change(function(){
+        $("#table-nilai").on("change", "input", function(){
             var input = $(this)
             var id = input.data('id')
             var index = input.attr('name')

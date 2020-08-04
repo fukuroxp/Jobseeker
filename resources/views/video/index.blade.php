@@ -92,7 +92,7 @@
     <script src="{{ asset('app-assets/js/scripts/pages/app-chat.js') }}"></script>
 
     <script>
-        $('.action_add').click(function(e) {
+        $('.action_add').on('click', function(e){
             var t = $('.action-modal');
             $.ajax({
                 url: '{{ route("video.create") }}',

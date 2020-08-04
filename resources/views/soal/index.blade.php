@@ -66,7 +66,7 @@
     <script>
         $('.datatable').DataTable();
 
-        $('.btn-modal').click(function() {
+        $('.btn-modal').on('click', function(e){
             var t = $('.action-modal');
             $.ajax({
                 url: $(this).data('href'),

@@ -245,7 +245,7 @@
             }
         });
 
-        $('.btn-start').click(function(e) {
+        $('.btn-start').on('click', function(e){
             var btn = $(this);
             Swal.fire({
                     title: 'Anda yakin?',

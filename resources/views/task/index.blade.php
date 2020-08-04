@@ -138,7 +138,7 @@
 
 @section('js')
     <script>
-        $('.action_add').click(function(e) {
+        $('.action_add').on('click', function(e){
             var t = $('.action-modal');
             $.ajax({
                 url: '{{ route("task.create") }}',
@@ -149,7 +149,7 @@
             })
         })
 
-        $('.action-show').click(function(e) {
+        $('.action-show').on('click', function(e){
             e.stopPropagation();
             window.open($(this).data('href'));
         })

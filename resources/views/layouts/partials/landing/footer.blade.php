@@ -7,7 +7,7 @@
                         <h3 class="text-white">Dharma Wanita Persatuan</h3>
                     </div>
                     <ul>
-                        <li>Address: Jl. Genteng Kali No.33, Genteng, Kec. Genteng, Kota Surabaya, Jawa timur 60275</li>
+                        <li>Address: Jl. Gentengkali No. 33 Gentengkali Surabaya</li>
                         <li>Phone: +65 11.188.888</li>
                         <li>Email: admin@gmail.com</li>
                     </ul>

@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="col-lg-7 col-md-7 d-flex align-items-center float-right">
-                    <h2><b>Dharma Wanita Persatuan</b></h2>
+                    <h2><b>Dharma Wanita Persatuan Dinas Pendidikan Provinsi Jawa Timur</b></h2>
                 </div>
             </div>
         </div>
@@ -43,23 +43,32 @@
             <nav class="nav-menu mobile-menu">
                 <ul>
                     <li class="active"><a href="/">Beranda</a></li>
-                    <li><a href="#">Profil</a></li>
-                    <li><a href="#">Layanan</a>
+                    <li><a href="#">Profil</a>
                         <ul class="dropdown">
-                            <li><a href="#">Men's</a></li>
-                            <li><a href="#">Women's</a></li>
-                            <li><a href="#">Kid's</a></li>
+                            <li><a href="#">Sejarah DWP</a></li>
+                            <li><a href="#">Anggota</a></li>
+                            <li><a href="#">Struktur</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Berita</a></li>
-                    <li><a href="#">Kontak</a>
+                    <li><a href="#">Layanan</a>
                         <ul class="dropdown">
-                            <li><a href="#">Blog Details</a></li>
-                            <li><a href="#">Shopping Cart</a></li>
-                            <li><a href="#">Checkout</a></li>
-                            <li><a href="#">Faq</a></li>
-                            <li><a href="#">Register</a></li>
-                            <li><a href="#">Login</a></li>
+                            <li><a href="#">E-Proker</a></li>
+                            <li><a href="#">Gedung DWP</a></li>
+                            <li><a href="#">Toko DWP</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Berita</a>
+                        <ul class="dropdown">
+                            <li><a href="#">Berita Internal</a></li>
+                            <li><a href="#">Berita Eksternal</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Publikasi</a>
+                        <ul class="dropdown">
+                            <li><a href="#">Pengumuman</a></li>
+                            <li><a href="#">Dokumen Sekretariat</a></li>
+                            <li><a href="#">Gallery Foto</a></li>
+                            <li><a href="#">Gallery Video</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Pengumuman Lomba</a></li>

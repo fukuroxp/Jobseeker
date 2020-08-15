@@ -17,6 +17,9 @@ Route::get('/', function () {
     // return redirect('/login');
     return view('home');
 });
+Route::get('/pengumuman-lomba', function() {
+    return view('pengumuman_lomba');
+})->name('pengumuman.lomba');
 
 // Auth::routes();
 

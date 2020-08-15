@@ -71,7 +71,7 @@
                             <li><a href="#">Gallery Video</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Pengumuman Lomba</a></li>
+                    <li><a href="{{ route('pengumuman.lomba') }}">Pengumuman Lomba</a></li>
                 </ul>
             </nav>
             <div id="mobile-menu-wrap"></div>

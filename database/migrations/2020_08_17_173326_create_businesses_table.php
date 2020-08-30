@@ -18,7 +18,7 @@ class CreateBusinessesTable extends Migration
             $table->foreignId('user_id');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('logo');
+            $table->string('logo')->nullable();
             $table->string('address');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();

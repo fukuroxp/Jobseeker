@@ -2,6 +2,11 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/users.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-gradient.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/dashboard-analytics.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/card-analytics.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/tour/tour.css') }}">
 @endsection
 
 @section('content')
@@ -142,6 +147,7 @@
 
 @section('js')
     <script src="{{ asset('app-assets/js/scripts/pages/user-profile.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/pages/dashboard-analytics.js') }}"></script>
     <script>
         $('.action-show').on("click",function(e){
             e.stopPropagation();

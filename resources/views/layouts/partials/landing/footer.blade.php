@@ -4,26 +4,20 @@
             <div class="col-lg-3">
                 <div class="footer-left">
                     <div class="footer-logo">
-                        <h3 class="text-white">Dharma Wanita Persatuan</h3>
+                        <h3 class="text-white">Unesa Career Center</h3>
                     </div>
                     <ul>
-                        <li>Address: Jl. Gentengkali No. 33 Gentengkali Surabaya</li>
-                        <li>Phone: +65 11.188.888</li>
-                        <li>Email: admin@gmail.com</li>
+                        <li>Address: Kampus Unesa Ketintang, Gayungan, Surabaya</li>
+                        <li>Phone: +6231-99423002</li>
+                        <li>Email: info@unesa.ac.id</li>
                     </ul>
-                    <div class="footer-social">
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-instagram"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-pinterest"></i></a>
-                    </div>
                 </div>
             </div>
             <div class="col-lg-2 offset-lg-1">
                 <div class="footer-widget">
                     <h5>Information</h5>
                     <ul>
-                        <li><a href="#">Pengumuman Lomba</a></li>
+                        <li><a href="{{ route('home.lowongan') }}">Vacancy</a></li>
                     </ul>
                 </div>
             </div>
@@ -31,8 +25,8 @@
                 <div class="footer-widget">
                     <h5>My Account</h5>
                     <ul>
-                        <li><a href="#">Login</a></li>
-                        <li><a href="#">Register</a></li>
+                        <li><a href="{{ auth()->user() ? route('dashboard') : route('login') }}">Login</a></li>
+                        <li><a href="{{ auth()->user() ? route('dashboard') : route('register') }}">Register</a></li>
                     </ul>
                 </div>
             </div>

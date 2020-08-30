@@ -13,42 +13,59 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    // return redirect('/login');
-    return view('home');
-});
-Route::get('/pengumuman-lomba', function() {
-    return view('pengumuman_lomba');
-})->name('pengumuman.lomba');
+Route::get('/', 'HomeController@home')->name('home');
+Route::get('/artikel/{slug}', 'HomeController@artikel')->name('home.artikel');
+Route::get('/lowongan', 'HomeController@lowongan')->name('home.lowongan');
+Route::get('/lowongan/{id}', 'HomeController@showLowongan')->name('home.showLowongan');
+Route::get('/business/{id}', 'HomeController@showBusiness')->name('home.showBusiness');
 
-// Auth::routes();
+Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/test', function() {
 //     return view('home');
 // });
 
-// Route::group(['middleware' => 'auth'], function () {
-//     Route::resource('users', 'UserController');
-//     Route::resource('materi', 'MateriController');
-//     Route::resource('video', 'VideoController');
-//     Route::post('task/{id}/submit', 'TaskController@submit')->name('task.submit');
-//     Route::resource('task', 'TaskController');
-//     Route::resource('kelas', 'KelasController');
-//     Route::post('soal/exam/answer', 'SoalController@storeAnswer')->name('soal.storeAnswer');
-//     Route::post('soal/exam/finish', 'SoalController@examFinish')->name('soal.examFinish');
-//     Route::post('soal/{id}/item', 'SoalController@storeItem')->name('soal.storeItem');
-//     Route::post('soal/{id}/exam', 'SoalController@examStart')->name('soal.examStart');
-//     Route::resource('soal', 'SoalController');
-//     Route::get('home/notifications', 'HomeController@loadMoreNotifications');
-//     Route::post('home/feed', 'HomeController@feed')->name('home.feed');
-//     Route::post('home/reply', 'HomeController@reply')->name('home.reply');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('setting', 'SettingController@index')->name('setting.index');
+    Route::post('setting/user', 'SettingController@updateUser')->name('setting.updateUser');
+    Route::post('setting/password', 'SettingController@updatePassword')->name('setting.updatePassword');
+    Route::post('setting/business', 'SettingController@updateBusiness')->name('setting.updateBusiness');
+    Route::post('setting/mailer', 'SettingController@updateMailer')->name('setting.updateMailer');
 
-//     Route::get('activity', 'ReportController@activity')->name('report.activity');
-//     Route::post('nilai', 'ReportController@saveNilai')->name('report.saveNilai');
-//     Route::get('nilai', 'ReportController@nilai')->name('report.nilai');
+    Route::resource('users', 'UserController');
 
-//     Route::get('setting', 'HomeController@setting')->name('home.setting');
-//     Route::post('setting', 'HomeController@updateSetting')->name('home.updateSetting');
-//     Route::post('password', 'HomeController@updatePassword')->name('home.updatePassword');
-// });
+    Route::resource('packages', 'PackageController');
+    Route::post('subscriptions/{id}/action', 'SubscriptionController@action')->name('subscriptions.action');
+    Route::resource('subscriptions', 'SubscriptionController');
+    Route::get('jobs/{id}/apply', 'JobController@getApply')->name('jobs.getApply');
+    Route::post('jobs/{id}/apply', 'JobController@apply')->name('jobs.apply');
+    Route::get('jobs/{id}/approval/{action}', 'JobController@getApproval')->name('jobs.getApproval');
+    Route::post('jobs/{id}/action', 'JobController@action')->name('jobs.action');
+    Route::resource('jobs', 'JobController');
+    Route::resource('applicants', 'JobApplicantController');
+    Route::resource('articles', 'ArticleController');
+    
+    // Route::resource('users', 'UserController');
+    // Route::resource('materi', 'MateriController');
+    // Route::resource('video', 'VideoController');
+    // Route::post('task/{id}/submit', 'TaskController@submit')->name('task.submit');
+    // Route::resource('task', 'TaskController');
+    // Route::post('soal/exam/answer', 'SoalController@storeAnswer')->name('soal.storeAnswer');
+    // Route::post('soal/exam/finish', 'SoalController@examFinish')->name('soal.examFinish');
+    // Route::post('soal/{id}/item', 'SoalController@storeItem')->name('soal.storeItem');
+    // Route::post('soal/{id}/exam', 'SoalController@examStart')->name('soal.examStart');
+    // Route::resource('soal', 'SoalController');
+    // Route::get('home/notifications', 'HomeController@loadMoreNotifications');
+    // Route::post('home/feed', 'HomeController@feed')->name('home.feed');
+    // Route::post('home/reply', 'HomeController@reply')->name('home.reply');
+
+    // Route::get('activity', 'ReportController@activity')->name('report.activity');
+    // Route::post('nilai', 'ReportController@saveNilai')->name('report.saveNilai');
+    // Route::get('nilai', 'ReportController@nilai')->name('report.nilai');
+
+    // Route::get('setting', 'HomeController@setting')->name('home.setting');
+    // Route::post('setting', 'HomeController@updateSetting')->name('home.updateSetting');
+    // Route::post('password', 'HomeController@updatePassword')->name('home.updatePassword');
+});

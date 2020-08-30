@@ -15,7 +15,7 @@
                                 <h4 class="mb-0">Login</h4>
                             </div>
                         </div>
-                        <p class="px-2">*untuk siswa password menggunakan nomor induk</p>
+                        <p class="px-2">Selamat datang di Unesa Career Center</p>
                         <div class="card-content">
                             <div class="card-body pt-1">
                                 <form action="{{ route('login') }}" method="POST">
@@ -81,9 +81,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-xl-8 col-11 d-flex justify-content-center m-0" style="height: 1px">
-        <h1 class="text-white">Selamat Datang di Web Pembelajaran Kelas XI Multimedia</h1>
     </div>
 </section>
 

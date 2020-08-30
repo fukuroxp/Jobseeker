@@ -6,7 +6,6 @@
             <div class="navbar-collapse" id="navbar-mobile">
                 @php
                     $role = auth()->user()->getRoleNames()[0];
-                    $role = ($role == 'admin') ? 'Admin' : (($role == 'mentor') ? 'Guru' : 'Siswa');
                 @endphp
                 <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
                     <ul class="nav navbar-nav">
@@ -24,7 +23,7 @@
                         <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{ auth()->user()->name ?? '' }}</span><span class="user-status">{{ $role ?? '' }}</span></div><span><img class="round" src="{{ auth()->user()->image ? asset('uploads/images/'.auth()->user()->image) : asset('uploads/images/profile.png') }}" alt="avatar" height="40" width="40"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="{{ route('home.setting') }}"><i class="fa fa-cog"></i> Pengaturan</a>
+                            <a class="dropdown-item" href="{{ route('setting.index') }}"><i class="fa fa-cog"></i> Pengaturan</a>
                             <div class="dropdown-divider"></div><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="feather icon-power"></i> Logout</a>
                         </div>
                     </li>

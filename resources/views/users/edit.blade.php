@@ -2,7 +2,7 @@
     {!! Form::open(['url' => route('users.update', [$data->id]), 'method' => 'put']) !!}
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title" id="exampleModalLabel">Edit {{ $role == 'mentor' ? 'Guru' : 'Siswa' }}</h5>
+            <h4 class="modal-title" id="exampleModalLabel">Edit Pengguna</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -21,11 +21,6 @@
                 {!! Form::password('password', ['class' => 'form-control', 'minlength' => "6", 'oninvalid' => "this.setCustomValidity('Min 6 digit')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <hr>
-            @if ($role == 'student')
-                @include('users.partials.form_student');
-            @else
-                @include('users.partials.form_mentor');
-            @endif
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Simpan</button>

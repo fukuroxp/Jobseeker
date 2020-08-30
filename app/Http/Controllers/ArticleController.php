@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Kelas;
+use App\Article;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
-class KelasController extends Controller
+class ArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +16,8 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $data = Kelas::all();
-        return view('kelas.index', compact('data'));
+        $data = Article::all();
+        return view('article.index', compact('data'));
     }
 
     /**
@@ -26,7 +27,7 @@ class KelasController extends Controller
      */
     public function create()
     {
-        return view('kelas.create');
+        return view('article.create');
     }
 
     /**
@@ -38,12 +39,14 @@ class KelasController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        $input['user_id'] = auth()->id();
+        $input['slug'] = Str::slug($input['title'], '-');
         
-        Kelas::create($input);
+        Article::create($input);
 
-        flash('Berhasil menambahkan kelas')->success();
+        flash('Berhasil menambahkan artikel')->success();
 
-        return redirect()->route('kelas.index');
+        return redirect()->route('articles.index');
     }
 
     /**
@@ -54,7 +57,20 @@ class KelasController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $data = Package::find($id);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil menghapus paket layanan',
+                'data' => $data
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menghapus paket layanan'
+            ]);
+        }
     }
 
     /**
@@ -65,8 +81,8 @@ class KelasController extends Controller
      */
     public function edit($id)
     {
-        $data = Kelas::find($id);
-        return view('kelas.edit', compact('data'));
+        $data = Article::find($id);
+        return view('article.edit', compact('data'));
     }
 
     /**
@@ -79,12 +95,13 @@ class KelasController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        $input['slug'] = Str::slug($input['title'], '-');
         
-        Kelas::find($id)->update($input);
+        Article::find($id)->update($input);
 
-        flash('Berhasil mengedit kelas')->success();
+        flash('Berhasil mengedit artikel')->success();
 
-        return redirect()->route('kelas.index');
+        return redirect()->route('articles.index');
     }
 
     /**
@@ -96,16 +113,16 @@ class KelasController extends Controller
     public function destroy($id)
     {
         try {
-            Kelas::find($id)->delete();
+            Article::find($id)->delete();
 
             return response()->json([
                 'status' => true,
-                'message' => 'Berhasil menghapus kelas'
+                'message' => 'Berhasil menghapus artikel'
             ]);
         } catch(\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Gagal menghapus kelas'
+                'message' => 'Gagal menghapus artikel'
             ]);
         }
     }

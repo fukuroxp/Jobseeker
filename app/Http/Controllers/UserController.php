@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Kelas;
+use Spatie\Permission\Models\Role;
 
 use Illuminate\Http\Request;
 
@@ -16,15 +17,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        if(request()->type == 'student') {
-            $role = 'student';
-            $data = User::role('student')->get();
-        } else {
-            $role = 'mentor';
-            $data = User::role('mentor')->get();
-        }
+        $data = User::all();
 
-        return view('users.index', compact('data', 'role'));
+        return view('users.index', compact('data'));
     }
 
     /**
@@ -34,10 +29,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $kelas = Kelas::all()->pluck('name', 'id');
-        $role = request()->role;
-        $data = null;
-        return view('users.create', compact('role', 'kelas', 'data'));
+        $role = Role::where('name', '!=', 'Super Admin')->pluck('name', 'name');
+        return view('users.create', compact('role'));
     }
 
     /**
@@ -48,10 +41,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->except(['_token', 'role']);
+        $input = $request->except(['_token']);
         $input['password'] = \Hash::make($input['password']);
 
-        $role = $request->role;
+        $role = $request->role_id;
 
         $user = User::create($input);
         $user->assignRole($role);
@@ -82,9 +75,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $data = User::find($id);
-        $role = $data->getRoleNames()[0];
-        $kelas = Kelas::all()->pluck('name', 'id');
-        return view('users.edit', compact('data', 'kelas', 'role'));
+        $role = Role::where('name', '!=', 'Super Admin')->pluck('name', 'name');
+        return view('users.edit', compact('data', 'role'));
     }
 
     /**
@@ -96,11 +88,9 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $input = $request->except(['_token', 'role', 'password']);
+        $input = $request->except(['_token', 'password']);
 
         $user = User::find($id);
-
-        $role = $user->getRoleNames()[0];
 
         if($request->input('password'))
             $user->password = \Hash::make($request->password);
@@ -111,7 +101,7 @@ class UserController extends Controller
 
         flash('Berhasil mengubah user')->success();
 
-        return redirect()->route('users.index', ['type' => $role]);
+        return redirect()->route('users.index');
     }
 
     /**

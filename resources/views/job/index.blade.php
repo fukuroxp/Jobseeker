@@ -5,7 +5,7 @@
     <div class="content-header-left col-md-12 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title d-flex justify-content-center mb-0">Data Kelas</h2>
+                <h2 class="content-header-title mb-0">Data Lowongan</h2>
             </div>
         </div>
     </div>
@@ -16,28 +16,35 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    @if (!auth()->user()->hasRole('Jobseeker'))
                     <div class="card-header">
-                        <button class="btn btn-outline-primary btn-modal" data-href="{{ route('kelas.create') }}"><i class='feather icon-plus'></i> Tambah</button>
+                        <button class="btn btn-outline-primary btn-modal" data-href="{{ route('jobs.create') }}"><i class='feather icon-plus'></i> Tambah</button>
                     </div>
+                    @endif
                     <div class="card-content">
                         <div class="card-body card-dashboard">
                             <div class="table-responsive">
                                 <table class="table table-striped datatable">
                                     <thead>
                                         <tr>
-                                            <th>Kelas</th>
-                                            <th>Jurusan</th>
+                                            <th>Perusahaan</th>
+                                            <th>Judul</th>
+                                            <th>Deadline</th>
                                             <th>Tindakan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($data as $value)
                                             <tr>
-                                                <td>{{ $value->name ?? '' }}</td>
-                                                <td>{{ $value->jurusan ?? '' }}</td>
+                                                <td>{{ $value->business->name ?? '' }}</td>
+                                                <td>{{ $value->title ?? '' }}</td>
+                                                <td>{{ $value->due_at ? date('d/m/Y', strtotime($value->due_at)) : '-' }}</td>
                                                 <td>
-                                                    <span class="btn-modal" style="cursor: pointer;" data-href="{{ route('kelas.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"></i></span>
-                                                    <span class="action-delete" style="cursor: pointer;" data-href="{{ route('kelas.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"></i></span>
+                                                    <span class="btn-edit" style="cursor: pointer;" data-href="{{ route('jobs.show', [$value->id]) }}"><i class="feather icon-eye" title="Lihat / Lamar"></i></span>
+                                                    @if (!auth()->user()->hasRole('Jobseeker'))
+                                                    <span class="btn-edit" style="cursor: pointer;" data-href="{{ route('jobs.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"></i></span>
+                                                    <span class="action-delete" style="cursor: pointer;" data-href="{{ route('jobs.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"></i></span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -52,7 +59,8 @@
     </section>
     <!-- Data list view end -->
 
-    <div class="modal fade action-modal" id="xlarge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true"></div>
+    <div class="modal fade action-modal" id="xlarge" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true"></div>
+    <div class="modal fade child-modal" id="xlarge" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true"></div>
 
 </div>
 @endsection
@@ -61,7 +69,7 @@
     <script>
         $('.datatable').DataTable();
 
-        $('.datatable').on('click', '.btn-modal', function(e){
+        $('.datatable').on('click', '.btn-edit', function(e){
             var t = $('.action-modal');
             $.ajax({
                 url: $(this).data('href'),

@@ -5,7 +5,7 @@
     <div class="content-header-left col-md-12 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title d-flex justify-content-center mb-0">Data {{ $role == 'mentor' ? 'Guru' : 'Siswa' }}</h2>
+                <h2 class="content-header-title mb-0">Data Pengguna</h2>
             </div>
         </div>
     </div>
@@ -17,16 +17,42 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <button class="btn btn-outline-primary btn-modal" data-href="{{ route('users.create', ['role' => $role]) }}"><i class='feather icon-plus'></i> Tambah</button>
+                        <button class="btn btn-outline-primary btn-modal" data-href="{{ route('users.create') }}"><i class='feather icon-plus'></i> Tambah</button>
                     </div>
                     <div class="card-content">
                         <div class="card-body card-dashboard">
                             <div class="table-responsive">
-                                @if ($role == 'student')
-                                    @include('users.partials.student');
-                                @else
-                                    @include('users.partials.mentor');
-                                @endif
+                                <table class="table table-striped datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Tindakan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($data as $value)
+                                            <tr>
+                                                <td>{{ $value->name ?? '' }}</td>
+                                                <td>{{ $value->email ?? '' }}</td>
+                                                <td>
+                                                    <div class="chip chip-success">
+                                                        <div class="chip-body">
+                                                            <div class="chip-text">{{ $value->getRoleNames()[0] }}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if (auth()->user()->id != $value->id || !auth()->user()->hasRole('Super Admin') || !auth()->user()->hasRole('Admin'))
+                                                        <span class="btn-edit" style="cursor: pointer;" data-href="{{ route('users.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"></i></span>
+                                                        <span class="action-delete" style="cursor: pointer;" data-href="{{ route('users.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"></i></span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -36,7 +62,7 @@
     </section>
     <!-- Data list view end -->
 
-    <div class="modal fade action-modal" id="xlarge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true"></div>
+    <div class="modal fade action-modal" id="xlarge" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true"></div>
 
 </div>
 @endsection
@@ -45,7 +71,7 @@
     <script>
         $('.datatable').DataTable();
 
-        $('.datatable').on('click', '.btn-modal', function(e){
+        $('.datatable').on('click', '.btn-edit', function(e){
             var t = $('.action-modal');
             $.ajax({
                 url: $(this).data('href'),

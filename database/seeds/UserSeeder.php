@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\User;
+use App\Setting;
 
 class UserSeeder extends Seeder
 {
@@ -14,15 +15,30 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'peserta']);
+        $setting = [
+            'mail_driver' => 'smtp',
+            'mail_host' => 'smtp.gmail.com',
+            'mail_port' => 587,
+            'mail_from_address' => 'hello@ucc.com',
+            'mail_from_name' => 'Unesa Career Center',
+            'mail_encryption' => 'tls',
+            'mail_username' => '',
+            'mail_password' => ''
+        ];
+
+        Setting::create(['data' => $setting]);
+
+        Role::create(['name' => 'Super Admin']);
+        Role::create(['name' => 'Admin']);
+        Role::create(['name' => 'HRD']);
+        Role::create(['name' => 'Jobseeker']);
 
         $user = User::create([
-            'name' => 'Admin',
+            'name' => 'Super Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);
 
-        $user->assignRole('admin');
+        $user->assignRole('Super Admin');
     }
 }

@@ -8,9 +8,9 @@
     <meta name="keywords" content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="PIXINVENT">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>StudyMultimedia</title>
+    <title>Admin | Unesa Career Center</title>
     <link rel="apple-touch-icon" href="{{ asset('app-assets/images/ico/apple-icon-120.png') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('app-assets/images/ico/favicon.ico') }}">
+    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/7/75/Unesa.png"/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
@@ -40,6 +40,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/app-chat.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/wizard.css') }}">
     <link href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" rel="stylesheet" />
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pickadate@5.0.0-alpha.3/builds/index.min.js"></script>
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
@@ -121,7 +123,7 @@
             if (!$(this).data('loaded')) {
                 e.preventDefault();
                 var this_link = $(this);
-                var href = '{{action('HomeController@loadMoreNotifications')}}';
+                var href = '#';
                 $('span.notifications_count').html('<i class="fa fa-refresh fa-spin fa-fw"></i>');
                 $.ajax({
                     url: href,
@@ -147,6 +149,23 @@
             else
                 $('.company').addClass('d-none')
         }) 
+
+        $('.btn-modal').on('click', function(e){
+            var t = $('.action-modal');
+            $.ajax({
+                url: $(this).data('href'),
+                dataType: "html",
+                success: function(e) {
+                    $(t).html(e).modal("show")
+                }
+            })
+        })
+        
+        $(document).ready(function() {
+            $(".price").map(function() {
+                this.innerHTML = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(this.innerHTML)
+            }).get();
+        });
     </script>
     <!-- BEGIN: Page JS-->
     @yield('js')

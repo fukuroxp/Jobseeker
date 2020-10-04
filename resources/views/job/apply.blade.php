@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md">
                     <div class="form-group">
-                        {!! Form::label('note', 'Catatan') !!}
+                        {!! Form::label('note', 'Motivation Letter') !!}
                         {!! Form::textarea('note', null, ['class' => 'form-control', 'required']) !!}
                     </div>
                 </div>

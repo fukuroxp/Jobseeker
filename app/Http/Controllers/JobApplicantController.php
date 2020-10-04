@@ -18,7 +18,7 @@ class JobApplicantController extends Controller
             }
     
             if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->profile) {
-                flash('Harap isi data Profile mu di pengaturan terlebih dahulu')->error();
+                flash('Harap isi data CV anda di pengaturan terlebih dahulu')->error();
                 return redirect()->route('dashboard');
             }
 

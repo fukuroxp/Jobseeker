@@ -27,7 +27,7 @@
                     <li class="nav-item">
                         <a class="nav-link d-flex py-75" id="account-pill-general" href="{{ route('setting.indexProfile') }}" aria-expanded="true">
                             <i class="feather icon-user mr-50 font-medium-3"></i>
-                            Profile
+                            Curriculum Vitae
                         </a>
                     </li>
                     @endif

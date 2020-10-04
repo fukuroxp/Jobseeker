@@ -40,7 +40,7 @@ class DashboardController extends Controller
         if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->profile) {
             $bg = 'bg-danger';
             $title = 'Harap isi data terlebih dahulu';
-            $message = 'Harap isi data Profile mu di pengaturan terlebih dahulu!';
+            $message = 'Detail CV anda belum lengkap, segera lengkapi di pengaturan terlebih dahulu!';
             $icon = 'feather icon-alert-circle';
         }
         return view('dashboard.index', compact('bg', 'title', 'message', 'icon'));

@@ -22,7 +22,7 @@ class JobController extends Controller
             }
     
             if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->profile) {
-                flash('Harap isi data Profile mu di pengaturan terlebih dahulu')->error();
+                flash('Harap isi data CV di pengaturan terlebih dahulu')->error();
                 return redirect()->route('dashboard');
             }
 
@@ -188,7 +188,7 @@ class JobController extends Controller
 
         $data = (object)[
             'to' => $apply->business->email,
-            'title' => $apply->job->title,
+            'title' => 'Lamaran - ' . $apply->job->title,
             'note' => $apply->note,
             'from' => $setting->data['mail_from_address']
         ];

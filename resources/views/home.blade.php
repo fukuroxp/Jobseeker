@@ -4,13 +4,107 @@
 <!-- Hero Section Begin -->
 <section class="hero-section">
     <div class="hero-items owl-carousel">
-        <div class="single-hero-items set-bg" data-setbg="https://madiunkota.go.id/wp-content/uploads/2020/07/RI.jpeg">
+        @foreach ($sliders as $slider)
+        <div class="single-hero-items set-bg" data-setbg="{{ asset('uploads/images/'. $slider->image) }}">
         </div>
+        @endforeach
     </div>
 </section>
 <!-- Hero Section End -->
 
-<!-- Blog Section Begin -->
+<!-- Latest Blog Section Begin -->
+<section class="latest-blog spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Headline</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach ($articles as $berita)
+            <div class="col-lg-3 col-md-6">
+                <div class="single-latest-blog">
+                    <img src="{{ asset('uploads/images/'. $berita->thumbnail) }}" alt="">
+                    <div class="latest-text">
+                        <div class="tag-list">
+                            <div class="tag-item">
+                                <i class="fa fa-calendar-o"></i>
+                                {{ $berita->created_at->format('d M, Y') }}
+                            </div>
+                        </div>
+                        <a href="{{ route('show.artikel', [$berita->slug]) }}">
+                            <h4>{{ $berita->title }}</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="row">
+                    @foreach ($vacancy as $item)
+                    <div class="col-lg-6 col-md-6">
+                        <div class="single-latest-blog">
+                            <div class="card mr-1" style="width: 16rem;">
+                                <img class="card-img-top bg-secondary p-1" src="{{ ($item && $item->logo) ? asset('uploads/images/'.$item->logo) : asset('uploads/images/default.png') }}">
+                                <div class="card-body">
+                                    <h5 class="card-title btn-show text-primary" style="cursor: pointer;" data-href="{{ route('home.showBusiness', [$item->id]) }}"><b>{{ $item->name ?? '' }}</b></h5>
+                                    <p class="card-text">{{ strip_tags($item->address) }}</p>
+                                </div>
+                                <hr class="mb-0">
+                                <ul class="list-group list-group-flush">
+                                    @foreach ($item->jobs as $job)
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <span class="btn-show text-primary" style="cursor: pointer;" data-href="{{ route('home.showLowongan', [$job->id]) }}"><b>{{ $job->title ?? '' }}</b></span>
+                                                </div>
+                                                <div class="col text-right">
+                                                    <i class="fa fa-calendar fa-sm"></i> 16H
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="row">
+                    @foreach ($articles as $berita)
+                    <div class="col-lg-6 col-md-6">
+                        <div class="single-latest-blog">
+                            <img src="{{ asset('uploads/images/'. $berita->thumbnail) }}" alt="">
+                            <div class="latest-text">
+                                <div class="tag-list">
+                                    <div class="tag-item">
+                                        <i class="fa fa-calendar-o"></i>
+                                        {{ $berita->created_at->format('d M, Y') }}
+                                    </div>
+                                </div>
+                                <a href="{{ route('show.artikel', [$berita->slug]) }}">
+                                    <h4>{{ $berita->title }}</h4>
+                                </a>
+                                <p>{!! Str::limit($berita->content, 50, '.') !!}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Latest Blog Section End -->
+{{-- <!-- Blog Section Begin -->
 <section class="blog-section spad">
     <div class="container">
         <div class="row">
@@ -67,7 +161,7 @@
         </div>
     </div>
 </section>
-<!-- Blog Section End -->
+<!-- Blog Section End --> --}}
 <div class="modal fade action-modal" id="xlarge" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true"></div>
 <div class="modal fade child-modal" id="xlarge" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true"></div>
 @endsection

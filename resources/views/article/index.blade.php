@@ -27,6 +27,7 @@
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Judul</th>
+                                            <th>Thumbnail</th>
                                             <th>Tindakan</th>
                                         </tr>
                                     </thead>
@@ -36,8 +37,12 @@
                                                 <td>{{ date('d/m/Y', strtotime($value->created_at)) }}</td>
                                                 <td>{{ $value->title ?? '' }}</td>
                                                 <td>
-                                                    <span class="btn-edit" style="cursor: pointer;" data-href="{{ route('articles.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"></i></span>
-                                                    <span class="action-delete" style="cursor: pointer;" data-href="{{ route('articles.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"></i></span>
+                                                    <a target="_blank" href="{{ asset('uploads/images/'.$value->thumbnail ?? '') }}">{{ $value->thumbnail }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <span class="btn-edit badge badge-pill badge-primary" style="cursor: pointer;" data-href="{{ route('articles.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"> Edit</i></span>
+                                                    <span class="action-delete badge badge-pill badge-danger" style="cursor: pointer;" data-href="{{ route('articles.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"> Delete</i></span>
                                                 </td>
                                             </tr>
                                         @endforeach

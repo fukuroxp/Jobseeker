@@ -1,5 +1,5 @@
 <div class="modal-dialog modal-lg" role="document">
-    {!! Form::open(['url' => route('jobs.update', [$data->id]), 'method' => 'post' 'files' => true]) !!}
+    {!! Form::open(['url' => route('jobs.update', [$data->id]), 'method' => 'post', 'files' => true]) !!}
     @method('PUT')
     <div class="modal-content">
         <div class="modal-header">
@@ -24,10 +24,6 @@
             <div class="form-group">
                 {!! Form::label('description', 'Deskripsi') !!}
                 {!! Form::textarea('description', $data->description ?? '', ['class' => 'form-control', 'required']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('file', 'File Soal Lamaran') !!}
-                {!! Form::file('file', ['class' => 'form-control']) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('due_at', 'Deadline') !!}

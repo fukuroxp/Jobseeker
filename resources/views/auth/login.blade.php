@@ -36,15 +36,15 @@
                                         @enderror
                                     </fieldset>
 
-                                    <fieldset class="form-label-group position-relative has-icon-left">
+                                    <fieldset class="form-label-group position-relative input-divider-right">
                                         <input 
                                             oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')"
                                             oninput="this.setCustomValidity('')"
-                                            type="password" class="form-control @error('password') is-invalid @enderror" id="user-password" name="password" placeholder="Password" required>
+                                            type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password" required>
                                         <div class="form-control-position">
-                                            <i class="feather icon-lock"></i>
+                                            <i class="feather icon-eye" onmouseover="mouseoverPass();" onmouseout="mouseoutPass();"></i>
                                         </div>
-                                        <label for="user-password">Password</label>
+                                        <label for="password">Password</label>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -55,13 +55,13 @@
                                         <div class="text-left">
                                             <fieldset class="checkbox">
                                                 <div class="vs-checkbox-con vs-checkbox-primary">
-                                                    <input type="checkbox" name="remember">
+                                                    <input type="checkbox">
                                                     <span class="vs-checkbox">
                                                         <span class="vs-checkbox--check">
                                                             <i class="vs-icon feather icon-check"></i>
                                                         </span>
                                                     </span>
-                                                    <span class="">Remember me</span>
+                                                    <span class="">Remember Me</span>
                                                 </div>
                                             </fieldset>
                                         </div>

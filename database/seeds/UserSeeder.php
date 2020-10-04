@@ -33,12 +33,37 @@ class UserSeeder extends Seeder
         Role::create(['name' => 'HRD']);
         Role::create(['name' => 'Jobseeker']);
 
-        $user = User::create([
+        $sadmin = User::create([
             'name' => 'Super Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);
 
-        $user->assignRole('Super Admin');
+        $sadmin->assignRole('Super Admin');
+
+        $admin = User::create([
+            'name' => 'Admin',
+            'email' => 'adminb@admin.com',
+            'password' => Hash::make('password'),
+        ]);
+
+        $admin->assignRole('Admin');
+
+        $hrd = User::create([
+            'name' => 'Hrd',
+            'email' => 'hrd@gmail.com',
+            'password' => Hash::make('password'),
+        ]);
+
+        $hrd->assignRole('HRD');
+
+        $jobseeker = User::create([
+            'name' => 'Jobseeker',
+            'email' => 'jobseeker@gmail.com',
+            'password' => Hash::make('password'),
+        ]);
+
+        $jobseeker->assignRole('Jobseeker');
+
     }
 }

@@ -25,10 +25,6 @@
                 {!! Form::textarea('description', null, ['class' => 'form-control', 'required']) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('file', 'File Soal Lamaran') !!}
-                {!! Form::file('file', ['class' => 'form-control']) !!}
-            </div>
-            <div class="form-group">
                 {!! Form::label('due_at', 'Deadline') !!}
                 {!! Form::text('due_at', null, ['class' => 'form-control pickadate', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>

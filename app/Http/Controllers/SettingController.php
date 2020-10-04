@@ -32,12 +32,6 @@ class SettingController extends Controller
             request()->image->move(public_path('uploads/images/'), $user->image);
         }
 
-        if ($request->hasFile('cv')) {
-            $user->cv = time().'.'.request()->cv->getClientOriginalExtension();
-            
-            request()->cv->move(public_path('uploads/file/'), $user->cv);
-        }
-
         $user->save();
 
         flash('Berhasil menyimpan pengaturan')->success();

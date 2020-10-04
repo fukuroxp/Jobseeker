@@ -26,7 +26,6 @@
                                     <thead>
                                         <tr>
                                             <th>Paket</th>
-                                            <th>Harga</th>
                                             <th>Durasi</th>
                                             <th>Tindakan</th>
                                         </tr>
@@ -35,7 +34,6 @@
                                         @foreach ($data as $value)
                                             <tr>
                                                 <td>{{ $value->name ?? '' }}</td>
-                                                <td class="price">{{ $value->price ?? '' }}</td>
                                                 <td>{{ $value->duration ?? '' }} hari</td>
                                                 <td>
                                                     <span class="btn-edit" style="cursor: pointer;" data-href="{{ route('packages.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"></i></span>

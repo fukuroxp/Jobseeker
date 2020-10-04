@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFilesToJobs extends Migration
+class CreateGuidesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddFilesToJobs extends Migration
      */
     public function up()
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            $table->string('file')->after('study')->nullable();
+        Schema::create('guides', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('file');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddFilesToJobs extends Migration
      */
     public function down()
     {
-        Schema::table('jobs', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('guides');
     }
 }

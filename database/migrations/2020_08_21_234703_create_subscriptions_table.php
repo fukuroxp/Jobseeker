@@ -17,7 +17,6 @@ class CreateSubscriptionsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('package_id');
-            $table->string('image');
             $table->enum('status', ['waiting', 'approved', 'rejected']);
             $table->date('expired_at')->nullable();
             $table->timestamps();

@@ -17,7 +17,6 @@ class CreatePackagesTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->decimal('price', 16, 4);
             $table->double('duration');
             $table->timestamps();
         });

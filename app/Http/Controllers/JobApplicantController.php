@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\JobApplicant;
+use App\Profile;
 use App\Subscription;
 
 use Illuminate\Http\Request;
@@ -14,13 +15,10 @@ class JobApplicantController extends Controller
             if(auth()->user()->hasRole('HRD') && !auth()->user()->business) {
                 flash('Harap isi data perusahaan di pengaturan terlebih dahulu')->error();
                 return redirect()->route('dashboard');
-            } else if(auth()->user()->hasRole('HRD') && Subscription::isSubscriptionExpired(auth()->id())) {
-                flash('Paket layanan anda telah habis, silahkan tambah paket layanan terlebih dahulu')->error();
-                return redirect()->route('dashboard');
             }
     
-            if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->cv) {
-                flash('Harap isi data CV mu di pengaturan terlebih dahulu')->error();
+            if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->profile) {
+                flash('Harap isi data Profile mu di pengaturan terlebih dahulu')->error();
                 return redirect()->route('dashboard');
             }
 
@@ -110,5 +108,13 @@ class JobApplicantController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function detail($id)
+    {
+        $data = Profile::where('user_id', $id)->first();
+
+        return view('job.detailapplicant', compact('data'));
+        
     }
 }

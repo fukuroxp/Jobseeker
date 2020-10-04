@@ -32,9 +32,10 @@
                                             <th>Nama Perusahaan</th>
                                             @endif
                                             <th>Paket</th>
-                                            <th>Harga</th>
                                             <th>Status</th>
+                                            @if (auth()->user()->hasRole('Admin') || auth()->user()->hasRole('Super Admin'))
                                             <th>Tindakan</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -62,7 +63,6 @@
                                                 <td>{{ $value->user->business->name }}</td>
                                                 @endif
                                                 <td>{{ $value->package->name ?? '' }}</td>
-                                                <td class="price">{{ $value->package->price ?? '0' }}</td>
                                                 <td>
                                                     <div class="chip chip-{{ $chip }}">
                                                         <div class="chip-body">
@@ -70,13 +70,15 @@
                                                         </div>
                                                     </div>
                                                 </td>
+                                                @if (auth()->user()->hasRole('Admin') || auth()->user()->hasRole('Super Admin'))
                                                 <td>
                                                     @if($value->status == 'waiting' && (auth()->user()->hasRole('Admin') || auth()->user()->hasRole('Super Admin')))
                                                         <span class="action-approval" style="cursor: pointer;" data-action="approved" data-href="{{ route('subscriptions.action', [$value->id]) }}"><i class="feather icon-check" title="Approve"></i></span>
                                                         <span class="action-approval" style="cursor: pointer;" data-action="rejected" data-href="{{ route('subscriptions.action', [$value->id]) }}"><i class="feather icon-x" title="Reject"></i></span>
                                                     @endif
-                                                    <span class="action-image" style="cursor: pointer;" data-href="{{ asset('uploads/images/'.$value->image) }}"><i class="feather icon-image" title="Bukti Transfer"></i></span>
+                                                    -
                                                 </td>
+                                                @endif
                                             </tr>
                                         @endforeach
                                     </tbody>

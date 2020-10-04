@@ -13,10 +13,6 @@
                 {!! Form::text('name', $data->name ?? '', ['class' => 'form-control', 'required', 'placeholder' => 'Basic', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('price', 'Harga') !!}
-                {!! Form::number('price', $data->price ?? '', ['class' => 'form-control', 'required', 'placeholder' => '100000', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
-            </div>
-            <div class="form-group">
                 {!! Form::label('duration', 'Durasi (hari)') !!}
                 {!! Form::number('duration', $data->duration ?? '', ['class' => 'form-control', 'required', 'placeholder' => '30', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>

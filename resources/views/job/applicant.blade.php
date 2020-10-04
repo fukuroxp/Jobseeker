@@ -24,13 +24,14 @@
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Pelamar</th>
+                                            @if (!auth()->user()->hasRole('Jobseeker'))
+                                            <th>Data Pelamar</th>
+                                            @endif
                                             <th>Perusahaan</th>
                                             <th>Pekerjaan</th>
-                                            <th>CV</th>
-                                            <th>File Jawaban</th>
                                             <th>Status</th>
                                             @if (!auth()->user()->hasRole('Jobseeker'))
-                                                <th>Tindakan</th>
+                                            <th>Tindakan</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -39,26 +40,13 @@
                                             <tr>
                                                 <td>{{ date('d/m/Y', strtotime($value->created_at)) }}</td>
                                                 <td>{{ $value->user->name ?? '' }}</td>
+                                                @if (!auth()->user()->hasRole('Jobseeker'))
+                                                <td>
+                                                    <a target="_blank" href="{{ route('applicants.detail', [$value->user->id]) }}">Lihat</a>
+                                                </td>
+                                                @endif
                                                 <td>{{ $value->business->name ?? '' }}</td>
                                                 <td>{{ $value->job->title ?? '' }}</td>
-                                                <td>
-                                                    <a target="_blank" href="{{ asset('uploads/file/'.$value->user->cv ?? '') }}">
-                                                        <div class="chip chip-primary">
-                                                            <div class="chip-body">
-                                                                <div class="chip-text">Download</div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a target="_blank" href="{{ asset('uploads/file/'.$value->file ?? '') }}">
-                                                        <div class="chip chip-primary">
-                                                            <div class="chip-body">
-                                                                <div class="chip-text">Download</div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </td>
                                                 @php
                                                     $chip = $value->status == 'waiting' ? 'warning' : ($value->status == 'approved' ? 'success' : 'danger');
                                                 @endphp
@@ -72,8 +60,11 @@
                                                 @if (!auth()->user()->hasRole('Jobseeker'))
                                                     <td>
                                                         @if ($value->status == 'waiting')
-                                                            <span class="btn-edit" style="cursor: pointer;" data-status="" data-href="{{ route('jobs.getApproval', [$value->id, 'approved']) }}"><i class="feather icon-check" title="Terima"></i></span>
-                                                            <span class="btn-edit" style="cursor: pointer;" data-status="" data-href="{{ route('jobs.getApproval', [$value->id, 'rejected']) }}"><i class="feather icon-x" title="Tolak"></i></span>
+                                                            <span class="btn-edit badge badge-pill badge-success" style="cursor: pointer;" data-status="" data-href="{{ route('jobs.getApproval', [$value->id, 'approved']) }}"><i class="feather icon-check" title="Terima"> Terima</i></span>
+                                                            <span class="btn-edit badge badge-pill badge-danger" style="cursor: pointer;" data-status="" data-href="{{ route('jobs.getApproval', [$value->id, 'rejected']) }}"><i class="feather icon-x" title="Tolak"> Tolak</i></span>
+                                                        @endif
+                                                        @if(auth()->user()->hasRole('Jobseeker'))
+                                                        -
                                                         @endif
                                                     </td>
                                                 @endif

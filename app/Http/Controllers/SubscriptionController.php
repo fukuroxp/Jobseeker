@@ -59,12 +59,6 @@ class SubscriptionController extends Controller
         $input = $request->all();
         $input['user_id'] = auth()->id();
         $input['status'] = 'waiting';
-
-        if ($request->hasFile('image')) {
-            $input['image'] = time().'.'.request()->image->getClientOriginalExtension();
-            
-            request()->image->move(public_path('uploads/images/'), $input['image']);
-        }
         
         Subscription::create($input);
 

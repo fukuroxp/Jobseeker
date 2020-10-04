@@ -6,32 +6,34 @@ use App\Article;
 use App\Business;
 use App\Subscription;
 use App\Job;
-
+use App\Slider;
+use App\Sponsor;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function home() {
-        return view('home');
+        $sliders = Slider::all();
+        $articles = Article::latest()->take(4)->get();
+        $vacancy = Business::whereHas('jobs')->latest()->take(4)->get();
+        // dd($vacancy);
+        return view('home', compact('sliders', 'articles', 'vacancy'));
     }
 
-    public function artikel($slug) {
-        $data = Article::where('slug', $slug)->first();
+    public function artikelIndex() {
+        $data = Article::all();
+        // dd($data);
 
-        return view('landing.article', compact('data'));
+        return view('landing.articleindex', compact('data'));
+    }
+
+    public function artikelShow(Article $article) {
+
+        return view('landing.articleshow', compact('article'));
     }
 
     public function lowongan() {
-        $data = Business::whereHas('jobs')
-                        ->get();
-
-        $data = $data->map(function ($item, $key) {
-            $isExpired = Subscription::isSubscriptionExpired($item->user_id);
-
-            if(!$isExpired) return $item;
-        });
-
-        $data = $data->filter()->all();
+        $data = Business::whereHas('jobs')->get();
 
         return view('landing.lowongan', compact('data'));
     }
@@ -46,5 +48,16 @@ class HomeController extends Controller
         $data = Business::find($id);
 
         return view('business.show', compact('data'));
+    }
+
+    public function showPengumuman() {
+
+        return view('pengumuman_lomba');
+    }
+
+    public function sponsor() {
+        $data = Sponsor::all();
+
+        return view('landing.sponsor', compact('data'));
     }
 }

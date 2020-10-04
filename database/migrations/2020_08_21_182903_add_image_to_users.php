@@ -14,7 +14,7 @@ class AddImageToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('image')->after('cv')->nullable();
+            $table->string('image')->after('email')->nullable();
         });
     }
 

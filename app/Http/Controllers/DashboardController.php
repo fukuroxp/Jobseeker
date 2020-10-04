@@ -32,20 +32,15 @@ class DashboardController extends Controller
 
         if(auth()->user()->hasRole('HRD') && !auth()->user()->business) {
             $bg = 'bg-danger';
-            $title = 'Waduh..., '.auth()->user()->name;
+            $title = 'Harap isi data terlebih dahulu';
             $message = 'Detail perusahaan anda belum lengkap, segera lengkapi di pengaturan!';
-            $icon = 'feather icon-alert-circle';
-        } else if(auth()->user()->hasRole('HRD') && Subscription::isSubscriptionExpired(auth()->id())) {
-            $bg = 'bg-danger';
-            $title = 'Waduh..., '.auth()->user()->name;
-            $message = 'Paket layanan anda telah habis, silahkan tambah paket layanan terlebih dahulu!';
             $icon = 'feather icon-alert-circle';
         }
 
-        if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->cv) {
+        if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->profile) {
             $bg = 'bg-danger';
-            $title = 'Waduh..., '.auth()->user()->name;
-            $message = 'Harap isi data CV mu di pengaturan terlebih dahulu!';
+            $title = 'Harap isi data terlebih dahulu';
+            $message = 'Harap isi data Profile mu di pengaturan terlebih dahulu!';
             $icon = 'feather icon-alert-circle';
         }
         return view('dashboard.index', compact('bg', 'title', 'message', 'icon'));

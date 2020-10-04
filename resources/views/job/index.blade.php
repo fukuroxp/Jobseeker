@@ -40,10 +40,10 @@
                                                 <td>{{ $value->title ?? '' }}</td>
                                                 <td>{{ $value->due_at ? date('d/m/Y', strtotime($value->due_at)) : '-' }}</td>
                                                 <td>
-                                                    <span class="btn-edit" style="cursor: pointer;" data-href="{{ route('jobs.show', [$value->id]) }}"><i class="feather icon-eye" title="Lihat / Lamar"></i></span>
+                                                    <span class="btn-edit badge badge-pill badge-info" style="cursor: pointer;" data-href="{{ route('jobs.show', [$value->id]) }}"><i class="feather icon-eye" title="Lihat / Lamar"> Lihat / Lamar</i></span>
                                                     @if (!auth()->user()->hasRole('Jobseeker'))
-                                                    <span class="btn-edit" style="cursor: pointer;" data-href="{{ route('jobs.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"></i></span>
-                                                    <span class="action-delete" style="cursor: pointer;" data-href="{{ route('jobs.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"></i></span>
+                                                    <span class="btn-edit badge badge-pill badge-primary" style="cursor: pointer;" data-href="{{ route('jobs.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"></i> Edit</span>
+                                                    <span class="action-delete badge badge-pill badge-danger" style="cursor: pointer;" data-href="{{ route('jobs.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"> Delete</i></span>
                                                     @endif
                                                 </td>
                                             </tr>

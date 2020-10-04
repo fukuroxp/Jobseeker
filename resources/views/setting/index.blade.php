@@ -23,6 +23,14 @@
                             Umum
                         </a>
                     </li>
+                    @if ($user->hasRole('Jobseeker'))
+                    <li class="nav-item">
+                        <a class="nav-link d-flex py-75" id="account-pill-general" href="{{ route('setting.indexProfile') }}" aria-expanded="true">
+                            <i class="feather icon-user mr-50 font-medium-3"></i>
+                            Profile
+                        </a>
+                    </li>
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link d-flex py-75" id="account-pill-password" data-toggle="pill" href="#account-vertical-password" aria-expanded="false">
                             <i class="feather icon-lock mr-50 font-medium-3"></i>
@@ -85,16 +93,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if ($user->hasRole('Jobseeker') || $user->hasRole('Super Admin'))
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <div class="controls">
-                                                    {!! Form::label('cv', 'Curriculum Vitae') !!}
-                                                    {!! Form::file('cv', ['class' => 'form-control']) !!}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endif
                                         <div class="col-12">
                                             <hr>
                                         </div>

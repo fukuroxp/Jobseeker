@@ -18,7 +18,6 @@ class CreateJobApplicantsTable extends Migration
             $table->foreignId('business_id');
             $table->foreignId('user_id');
             $table->text('note')->nullable();
-            $table->string('file')->nullable();
             $table->timestamps();
         });
     }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-
+use App\Package;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -40,7 +40,15 @@ class ArticleController extends Controller
     {
         $input = $request->all();
         $input['user_id'] = auth()->id();
+        
+        if ($request->hasFile('thumbnail')) {
+            $input['thumbnail'] = time().'.'.request()->thumbnail->getClientOriginalExtension();
+            
+            request()->thumbnail->move(public_path('uploads/images/'), $input['thumbnail']);
+        }
+
         $input['slug'] = Str::slug($input['title'], '-');
+
         
         Article::create($input);
 
@@ -95,7 +103,15 @@ class ArticleController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
+
+        if ($request->hasFile('thumbnail')) {
+            $input['thumbnail'] = time().'.'.request()->thumbnail->getClientOriginalExtension();
+            
+            request()->thumbnail->move(public_path('uploads/images/'), $input['thumbnail']);
+        }
+
         $input['slug'] = Str::slug($input['title'], '-');
+
         
         Article::find($id)->update($input);
 

@@ -45,8 +45,8 @@
                                                 </td>
                                                 <td>
                                                     @if (auth()->user()->id != $value->id || !auth()->user()->hasRole('Super Admin') || !auth()->user()->hasRole('Admin'))
-                                                        <span class="btn-edit" style="cursor: pointer;" data-href="{{ route('users.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"></i></span>
-                                                        <span class="action-delete" style="cursor: pointer;" data-href="{{ route('users.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"></i></span>
+                                                        <span class="btn-edit badge badge-pill badge-primary" style="cursor: pointer;" data-href="{{ route('users.edit', [$value->id]) }}"><i class="feather icon-edit" title="Edit"> Edit</i></span>
+                                                        <span class="action-delete badge badge-pill badge-danger" style="cursor: pointer;" data-href="{{ route('users.destroy', [$value->id]) }}"><i class="feather icon-trash" title="Delete"> Delete</i></span>
                                                     @endif
                                                 </td>
                                             </tr>

@@ -67,8 +67,8 @@
                                     </fieldset>
                                     <fieldset class="form-label-group position-relative has-icon-left">
                                         <select class="form-control" name="role" id="role">
-                                            <option value="HRD">Employeer / HRD</option>
-                                            <option value="Jobseeker">Jobseeker</option>
+                                            <option value="HRD">Employeer / Perusahaan</option>
+                                            <option value="Jobseeker">Jobseeker / Pelamar</option>
                                         </select>
                                         <div class="form-control-position">
                                             <i class="feather icon-user"></i>

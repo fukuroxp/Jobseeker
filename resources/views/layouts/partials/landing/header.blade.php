@@ -14,6 +14,9 @@
             <div class="ht-right">
                 <a href="{{ auth()->user() ? route('dashboard') : route('login') }}" class="login-panel"><i class="fa fa-user"></i>{{ auth()->user() ? auth()->user()->name : 'Login' }}</a>
                 <div class="top-social">
+                        {{ now()->format('l, d F Y') }}
+                </div>
+                <div class="top-social">
                     <a href="#"><i class="ti-facebook"></i></a>
                     <a href="#"><i class="ti-twitter-alt"></i></a>
                     <a href="#"><i class="ti-linkedin"></i></a>
@@ -22,33 +25,36 @@
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="inner-header">
-            <div class="d-flex flex-row">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <h2><b>UNESA VIRTUAL CAREER FAIR</b></h2>
+                </div>
                 <div class="">
                     <div class="logo">
                         <a href="./index.html">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Unesa.png" alt="" width="100rem" height="100rem">
+                            <img src="{{ asset('app-assets/images/logo/ucc.png') }}" alt="" width="100rem" height="100rem">
                         </a>
                     </div>
-                </div>
-                <div class="ml-2 d-flex align-items-center">
-                    <h2><b>Unesa Career Center</b></h2>
                 </div>
             </div>
         </div>
     </div>
+    
     <div class="nav-item">
         <div class="container">
             <nav class="nav-menu mobile-menu">
                 <ul>
                     <li class="{{ request()->is('/') ? 'active' : '' }}"><a href="/">Home</a></li>
-                    <li class="{{ request()->is('lowongan') ? 'active' : '' }}"><a href="{{ route('home.lowongan') }}">Vacancy</a></li>
-                    <li><a href="#">Layanan</a>
-                    </li>
-                    <li><a href="#">Berita</a>
-                    </li>
-                    <li><a href="#">Pengumuman</a></li>
+                    @guest
+                    <li><a href="{{ route('register') }}">Registrasi</a></li>
+                    @endguest
+                    <li class="{{ request()->is('artikel') ? 'active' : '' }}"><a href="{{ route('index.artikel') }}">Berita</a></li>
+                    <li class="{{ request()->is('lowongan') ? 'active' : '' }}"><a href="{{ route('home.lowongan') }}">Lowongan</a></li>
+                    <li class="{{ request()->is('pengumuman') ? 'active' : '' }}"><a href="#">Pengumuman</a></li>
+                    <li class="{{ request()->is('sponsor/all') ? 'active' : '' }}"><a href="{{ route('home.sponsor') }}">Sponsor</a></li>
                 </ul>
             </nav>
             <div id="mobile-menu-wrap"></div>

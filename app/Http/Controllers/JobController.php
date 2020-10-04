@@ -20,14 +20,9 @@ class JobController extends Controller
                 flash('Harap isi data perusahaan di pengaturan terlebih dahulu')->error();
                 return redirect()->route('dashboard');
             }
-            
-            if(auth()->user()->hasRole('HRD') && Subscription::isSubscriptionExpired(auth()->id())) {
-                flash('Paket layanan anda telah habis, silahkan tambah paket layanan terlebih dahulu')->error();
-                return redirect()->route('dashboard');
-            }
     
-            if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->cv) {
-                flash('Harap isi data CV mu di pengaturan terlebih dahulu')->error();
+            if(auth()->user()->hasRole('Jobseeker') && !auth()->user()->profile) {
+                flash('Harap isi data Profile mu di pengaturan terlebih dahulu')->error();
                 return redirect()->route('dashboard');
             }
 
@@ -70,12 +65,6 @@ class JobController extends Controller
     {
         $input = $request->all();
         $input['business_id'] = auth()->user()->business->id;
-
-        if ($request->hasFile('file')) {
-            $input['file'] = time().'.'.request()->file->getClientOriginalExtension();
-            
-            request()->file->move(public_path('uploads/file/'), $input['file']);
-        }
         
         Job::create($input);
 
@@ -119,12 +108,6 @@ class JobController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
-
-        if ($request->hasFile('file')) {
-            $input['file'] = time().'.'.request()->file->getClientOriginalExtension();
-            
-            request()->file->move(public_path('uploads/file/'), $input['file']);
-        }
         
         Job::find($id)->update($input);
 
@@ -198,12 +181,6 @@ class JobController extends Controller
         $input['business_id'] = $job->business_id;
         $input['job_id'] = $job->id;
         $input['user_id'] = auth()->user()->id;
-
-        if (request()->hasFile('file')) {
-            $input['file'] = time().'.'.request()->file->getClientOriginalExtension();
-            
-            request()->file->move(public_path('uploads/file/'), $input['file']);
-        }
         
         JobApplicant::create($input);
 

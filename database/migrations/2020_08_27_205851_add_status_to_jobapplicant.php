@@ -14,7 +14,7 @@ class AddStatusToJobapplicant extends Migration
     public function up()
     {
         Schema::table('job_applicants', function (Blueprint $table) {
-            $table->enum('status', ['waiting', 'approved', 'rejected'])->after('file')->default('waiting');
+            $table->enum('status', ['waiting', 'approved', 'rejected'])->after('note')->default('waiting');
         });
     }
 

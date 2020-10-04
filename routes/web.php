@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@home')->name('home');
-Route::get('/artikel/{slug}', 'HomeController@artikel')->name('home.artikel');
+Route::get('/artikel/{article:slug}', 'HomeController@artikelShow')->name('show.artikel');
+Route::get('/artikel', 'HomeController@artikelIndex')->name('index.artikel');
 Route::get('/lowongan', 'HomeController@lowongan')->name('home.lowongan');
 Route::get('/lowongan/{id}', 'HomeController@showLowongan')->name('home.showLowongan');
 Route::get('/business/{id}', 'HomeController@showBusiness')->name('home.showBusiness');
+// Route::get('/pengumuman', 'HomeController@showPengumuman')->name('home.showPengumuman');
+Route::get('/sponsor/all', 'HomeController@sponsor')->name('home.sponsor');
 
 Auth::routes();
 
@@ -33,6 +36,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('setting/password', 'SettingController@updatePassword')->name('setting.updatePassword');
     Route::post('setting/business', 'SettingController@updateBusiness')->name('setting.updateBusiness');
     Route::post('setting/mailer', 'SettingController@updateMailer')->name('setting.updateMailer');
+    Route::get('setting/profile', 'ProfileController@create')->name('setting.indexProfile');
+    Route::post('setting/profile', 'ProfileController@store')->name('setting.storeProfile');
+    Route::get('sliders', 'SliderController@index')->name('sliders.index');
+    Route::get('sliders/create', 'SliderController@create')->name('sliders.create');
+    Route::post('sliders/create', 'SliderController@store')->name('sliders.store');
+    Route::delete('sliders/{id}/delete', 'SliderController@destroy')->name('sliders.destroy');
+    Route::get('sponsor', 'SponsorController@index')->name('sponsor.index');
+    Route::get('sponsor/create', 'SponsorController@create')->name('sponsor.create');
+    Route::post('sponsor/create', 'SponsorController@store')->name('sponsor.store');
+    Route::delete('sponsor/{id}/delete', 'SponsorController@destroy')->name('sponsor.destroy');
 
     Route::resource('users', 'UserController');
 
@@ -45,7 +58,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('jobs/{id}/action', 'JobController@action')->name('jobs.action');
     Route::resource('jobs', 'JobController');
     Route::resource('applicants', 'JobApplicantController');
+    Route::get('detail/{id}/applicants', 'JobApplicantController@detail')->name('applicants.detail');
     Route::resource('articles', 'ArticleController');
+    Route::resource('guides', 'GuideController');
     
     // Route::resource('users', 'UserController');
     // Route::resource('materi', 'MateriController');

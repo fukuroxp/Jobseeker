@@ -20,7 +20,6 @@ Route::get('/lowongan', 'HomeController@lowongan')->name('home.lowongan');
 Route::get('/lowongan/{id}', 'HomeController@showLowongan')->name('home.showLowongan');
 Route::get('/business/{id}', 'HomeController@showBusiness')->name('home.showBusiness');
 // Route::get('/pengumuman', 'HomeController@showPengumuman')->name('home.showPengumuman');
-Route::get('/sponsor/all', 'HomeController@sponsor')->name('home.sponsor');
 
 Auth::routes();
 

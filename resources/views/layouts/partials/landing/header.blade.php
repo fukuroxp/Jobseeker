@@ -54,7 +54,6 @@
                     <li class="{{ request()->is('artikel') ? 'active' : '' }}"><a href="{{ route('index.artikel') }}">Berita</a></li>
                     <li class="{{ request()->is('lowongan') ? 'active' : '' }}"><a href="{{ route('home.lowongan') }}">Lowongan</a></li>
                     <li class="{{ request()->is('pengumuman') ? 'active' : '' }}"><a href="#">Pengumuman</a></li>
-                    <li class="{{ request()->is('sponsor/all') ? 'active' : '' }}"><a href="{{ route('home.sponsor') }}">Sponsor</a></li>
                 </ul>
             </nav>
             <div id="mobile-menu-wrap"></div>

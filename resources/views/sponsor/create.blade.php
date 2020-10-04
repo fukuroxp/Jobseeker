@@ -13,6 +13,10 @@
                 {!! Form::text('name', null, ['class' => 'form-control', 'required', 'placeholder' => '', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
+                {!! Form::label('link', 'Url') !!}
+                {!! Form::text('link', null, ['class' => 'form-control', 'required', 'placeholder' => '', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
+            </div>
+            <div class="form-group">
                 {!! Form::label('image', 'Gambar') !!}
                 {!! Form::file('image', ['class' => 'form-control', 'required']) !!}
             </div>

@@ -26,6 +26,7 @@
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
+                                            <th>Url</th>
                                             <th>Gambar</th>
                                             <th>Tindakan</th>
                                         </tr>
@@ -34,6 +35,7 @@
                                         @foreach ($data as $value)
                                             <tr>
                                                 <td>{{ $value->name ?? '' }}</td>
+                                                <td><a target="_blank" href="{{ $value->link ?? '' }}">{{ $value->link }}</a></td>
                                                 <td>
                                                     <span class="badge badge-pill badge-info"><a target="_blank" href="{{ asset('uploads/images/'. $value->image) }}">{{ $value->image ?? '' }}</a></span>
                                                 </td>

@@ -16,8 +16,9 @@ class HomeController extends Controller
         $sliders = Slider::all();
         $articles = Article::latest()->take(4)->get();
         $vacancy = Business::whereHas('jobs')->latest()->take(4)->get();
+        $sponsors = Sponsor::all();
         // dd($vacancy);
-        return view('home', compact('sliders', 'articles', 'vacancy'));
+        return view('home', compact('sliders', 'articles', 'vacancy', 'sponsors'));
     }
 
     public function artikelIndex() {
@@ -53,11 +54,5 @@ class HomeController extends Controller
     public function showPengumuman() {
 
         return view('pengumuman_lomba');
-    }
-
-    public function sponsor() {
-        $data = Sponsor::all();
-
-        return view('landing.sponsor', compact('data'));
     }
 }

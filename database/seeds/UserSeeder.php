@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'mail_host' => 'smtp.gmail.com',
             'mail_port' => 587,
             'mail_from_address' => 'hello@ucc.com',
-            'mail_from_name' => 'Unesa Career Center',
+            'mail_from_name' => 'Unesa Virtual Career Fair',
             'mail_encryption' => 'tls',
             'mail_username' => '',
             'mail_password' => ''
@@ -33,37 +33,12 @@ class UserSeeder extends Seeder
         Role::create(['name' => 'HRD']);
         Role::create(['name' => 'Jobseeker']);
 
-        $sadmin = User::create([
+        $admin = User::create([
             'name' => 'Super Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);
 
-        $sadmin->assignRole('Super Admin');
-
-        $admin = User::create([
-            'name' => 'Admin',
-            'email' => 'adminb@admin.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        $admin->assignRole('Admin');
-
-        $hrd = User::create([
-            'name' => 'Hrd',
-            'email' => 'hrd@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        $hrd->assignRole('HRD');
-
-        $jobseeker = User::create([
-            'name' => 'Jobseeker',
-            'email' => 'jobseeker@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        $jobseeker->assignRole('Jobseeker');
-
+        $admin->assignRole('Super Admin');
     }
 }

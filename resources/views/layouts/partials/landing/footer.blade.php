@@ -4,7 +4,7 @@
             <div class="col-lg-3">
                 <div class="footer-left">
                     <div class="footer-logo">
-                        <h3 class="text-white">Unesa Career Center</h3>
+                        <h3 class="text-white">Unesa Virtual Career Fair</h3>
                     </div>
                     <ul>
                         <li>Address: Kampus Unesa Ketintang, Gayungan, Surabaya</li>

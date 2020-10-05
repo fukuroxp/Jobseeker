@@ -19,7 +19,7 @@ Route::get('/artikel', 'HomeController@artikelIndex')->name('index.artikel');
 Route::get('/lowongan', 'HomeController@lowongan')->name('home.lowongan');
 Route::get('/lowongan/{id}', 'HomeController@showLowongan')->name('home.showLowongan');
 Route::get('/business/{id}', 'HomeController@showBusiness')->name('home.showBusiness');
-// Route::get('/pengumuman', 'HomeController@showPengumuman')->name('home.showPengumuman');
+Route::get('/pengumuman', 'HomeController@showPengumuman')->name('home.showPengumuman');
 
 Auth::routes();
 

@@ -6,6 +6,7 @@ use App\Article;
 use App\Business;
 use App\Subscription;
 use App\Job;
+use App\JobApplicant;
 use App\Slider;
 use App\Sponsor;
 use Illuminate\Http\Request;
@@ -52,7 +53,8 @@ class HomeController extends Controller
     }
 
     public function showPengumuman() {
+        $data = JobApplicant::where('status', 'approved')->latest()->get();
 
-        return view('pengumuman_lomba');
+        return view('landing.pengumuman', compact('data'));
     }
 }

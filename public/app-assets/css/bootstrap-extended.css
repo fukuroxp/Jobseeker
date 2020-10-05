@@ -2107,7 +2107,7 @@ body[data-col="1-column"] .header-navbar.floating-nav {
     vertical-align: middle; }
   .alert .alert-heading {
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 2rem;
     padding: 0;
     padding-bottom: 8px; }
   .alert.alert-dark .alert-heading {

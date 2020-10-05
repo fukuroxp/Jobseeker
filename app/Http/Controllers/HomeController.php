@@ -10,6 +10,7 @@ use App\JobApplicant;
 use App\Slider;
 use App\Sponsor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -54,6 +55,16 @@ class HomeController extends Controller
 
     public function showPengumuman() {
         $data = JobApplicant::where('status', 'approved')->latest()->get();
+
+        if(Auth::check()){
+            $accepted = JobApplicant::where([
+                                    ['user_id', '=', auth()->user()->id],
+                                    ['status', '=', 'approved']
+                                ])->latest()->get();
+            $available = $accepted->count() > 0;
+            
+            return view('landing.pengumuman', compact('data', 'accepted', 'available'));
+        }
 
         return view('landing.pengumuman', compact('data'));
     }

@@ -23,7 +23,9 @@
         </div>
         <div class="modal-footer">
             @if (auth()->user())
+                @if(auth()->user()->hasRole('Jobseeker|HRD'))
                 <button data-dismiss="modal" class="btn btn-primary btn-apply" data-href="{{ route('jobs.getApply', [$data->id]) }}">Lamar</button>
+                @endif
             @else
                 <a class="btn btn-primary" href="{{ route('login') }}">Login Untuk Melamar</a>
             @endif

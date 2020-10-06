@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    @if (!auth()->user()->hasRole('Jobseeker'))
+                    @if (!auth()->user()->hasRole('Jobseeker|Admin|Super Admin'))
                     <div class="card-header">
                         <button class="btn btn-outline-primary btn-modal" data-href="{{ route('jobs.create') }}"><i class='feather icon-plus'></i> Tambah</button>
                     </div>

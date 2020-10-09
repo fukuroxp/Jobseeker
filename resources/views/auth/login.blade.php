@@ -15,7 +15,7 @@
                                 <h4 class="mb-0">Login</h4>
                             </div>
                         </div>
-                        <p class="px-2">Selamat datang di Unesa Career Center</p>
+                        <p class="px-2">Selamat datang di Unesa Virtual Career Fair</p>
                         <div class="card-content">
                             <div class="card-body pt-1">
                                 <form action="{{ route('login') }}" method="POST">

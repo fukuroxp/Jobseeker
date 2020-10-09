@@ -650,7 +650,7 @@ ol {
 }
 
 .nav-item {
-	background: #252525;
+	background: #0b4d70;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -1501,7 +1501,7 @@ ol {
 -----------------------*/
 
 .footer-section {
-	background: #191919;
+	background: #0b4d70;
 	padding-top: 75px;
 }
 

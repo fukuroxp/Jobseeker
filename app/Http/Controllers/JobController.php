@@ -182,24 +182,23 @@ class JobController extends Controller
         $input['job_id'] = $job->id;
         $input['user_id'] = auth()->user()->id;
         
-        JobApplicant::create($input);
-        // $apply = JobApplicant::create($input);
+        $apply = JobApplicant::create($input);
 
-        // $setting = Setting::first();
+        $setting = Setting::first();
 
-        // $data = (object)[
-        //     'to' => $apply->business->email,
-        //     'title' => 'Lamaran - ' . $apply->job->title,
-        //     'note' => $apply->note,
-        //     'from' => $setting->data['mail_from_address']
-        // ];
+        $data = (object)[
+            'to' => $apply->business->email,
+            'title' => 'Lamaran - ' . $apply->job->title,
+            'note' => $apply->note,
+            'from' => $setting->data['mail_from_address']
+        ];
 
-        // Mail::send([], [], function($message) use ($data) {
-        //     $message->from($data->from);
-        //     $message->to($data->to);
-        //     $message->subject($data->title);
-        //     $message->setBody($data->note, 'text/html');
-        // });
+        Mail::send([], [], function($message) use ($data) {
+            $message->from($data->from);
+            $message->to($data->to);
+            $message->subject($data->title);
+            $message->setBody($data->note, 'text/html');
+        });
 
         flash('Berhasil melamar pekerjaan')->success();
 
@@ -217,21 +216,21 @@ class JobController extends Controller
             $job = JobApplicant::find($id);
             $job->update(['status' => $request->status]);
 
-            // $setting = Setting::first();
+            $setting = Setting::first();
 
-            // $data = (object)[
-            //     'to' => $job->user->email,
-            //     'title' => $request->title,
-            //     'note' => $request->note,
-            //     'from' => $setting->data['mail_from_address']
-            // ];
+            $data = (object)[
+                'to' => $job->user->email,
+                'title' => $request->title,
+                'note' => $request->note,
+                'from' => $setting->data['mail_from_address']
+            ];
 
-            // Mail::send([], [], function($message) use ($data) {
-            //     $message->from($data->from);
-            //     $message->to($data->to);
-            //     $message->subject($data->title);
-            //     $message->setBody($data->note, 'text/html');
-            // });
+            Mail::send([], [], function($message) use ($data) {
+                $message->from($data->from);
+                $message->to($data->to);
+                $message->subject($data->title);
+                $message->setBody($data->note, 'text/html');
+            });
 
             flash('Berhasil '.$request->status.' lamaran')->success();
             return redirect()->route('applicants.index');

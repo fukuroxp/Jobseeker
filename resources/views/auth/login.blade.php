@@ -9,6 +9,7 @@
                     <img src="{{ asset('app-assets/images/pages/login.png') }}" alt="branding logo">
                 </div>
                 <div class="col-lg-6 col-12 p-0">
+                    @include('flash::message')
                     <div class="card rounded-0 mb-0 px-2">
                         <div class="card-header pb-1">
                             <div class="card-title">

@@ -17,6 +17,13 @@
                 {!! Form::text('link', null, ['class' => 'form-control', 'required', 'placeholder' => '', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
             </div>
             <div class="form-group">
+                {!! Form::label('category', 'Kategori') !!}
+                <select class="form-control" required oninvalid="this.setCustomValidity('Mohon diisi dengan lengkap')" oninput="this.setCustomValidity('')" name="category">
+                    <option value="1">Sponsorship</option>
+                    <option value="2">Partnership</option>
+                </select>
+            </div>
+            <div class="form-group">
                 {!! Form::label('image', 'Gambar') !!}
                 {!! Form::file('image', ['class' => 'form-control', 'required']) !!}
             </div>

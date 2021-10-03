@@ -111,10 +111,23 @@ class JobApplicantController extends Controller
     }
 
     public function detail($id)
-    {
-        $data = Profile::where('user_id', $id)->first();
-
-        return view('job.detailapplicant', compact('data'));
+    {   
+        $data = JobApplicant::where('id', $id)->first();
+        
+        if(auth()->user()->hasRole('HRD') ) {
+            if($data->business_id != auth()->user()->business->id)
+            {
+                flash('Anda Tidak Memiliki Otoritas Untuk Melihat Lamaran ini!')->warning();
+                return back();
+            }
+            else{
+                return view('job.detailapplicant', compact('data'));
+            }
+        }
+        else if(auth()->user()->hasRole('Admin') || auth()->user()->hasRole('Super Admin')) {
+            return view('job.detailapplicant', compact('data'));
+        }
+        
         
     }
 }

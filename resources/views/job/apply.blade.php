@@ -15,11 +15,23 @@
                         {!! Form::textarea('note', null, ['class' => 'form-control', 'required']) !!}
                     </div>
                 </div>
+                
+                <div class="col-md">
+                    <fieldset class="form-group">
+                        <label for="lampiran">File Lampiran (opsional)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="lampiran" name="lampiran">
+                            <label class="custom-file-label" for="lampiran">Pilih file</label>
+                        </div>
+                    </fieldset>
+                </div>
+                
             </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary btn-apply" data-href="">Lamar</button>
         </div>
+        
     </div>
     {!! Form::close() !!}
 </div>

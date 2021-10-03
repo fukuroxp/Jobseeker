@@ -9,6 +9,37 @@
             </button>
         </div>
         <div class="modal-body">
+            @if (auth()->user()->hasRole('Admin|Super Admin'))
+            <div class="form-group">
+                {!! Form::label('title', 'Perusahaan') !!}
+                <select name="business_id" class="form-control select2">
+                    @foreach(\DB::table('businesses')
+                            ->get() as $ps)
+                            
+                        <option selected value="{{$data->business_id}}">{{$data->business->name ?? ''}}</option>
+                      <option value="{{$ps->id}}">{{$ps->name ?? ''}}</option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
+            <div class="form-group">
+                {!! Form::label('title', 'Kategori Lowongan') !!}
+                <select name="category[]" multiple="multiple" class="form-control select2-multiple">
+                    @foreach(\App\Category::orderBy('nama', 'ASC')
+                            ->get() as $ps)
+                      <option value="{{$ps->id}}">{{$ps->nama ?? ''}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                {!! Form::label('title', 'Regional Lowongan (Pilih Kota)') !!}
+                <select name="city[]" multiple="multiple" class="form-control select2-multiple">
+                    @foreach(\App\City::orderBy('title', 'ASC')
+                            ->get() as $kt)
+                      <option value="{{$kt->id}}">{{$kt->title ?? ''}}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="form-group">
                 {!! Form::label('title', 'Judul') !!}
                 {!! Form::text('title', $data->title, ['class' => 'form-control', 'required', 'placeholder' => 'Web Developer', 'oninvalid' => "this.setCustomValidity('Mohon diisi dengan lengkap')", 'oninput' => "this.setCustomValidity('')"]) !!}
@@ -43,3 +74,17 @@
         format: 'yyyy-mm-dd'
     });
 </script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Pilih Perusahaan",
+            });
+            
+            $(".select2-multiple").select2({
+                placeholder: "Pilih kategori lowongan",
+                maximumSelectionLength: 4
+            });
+    
+        });
+    </script>

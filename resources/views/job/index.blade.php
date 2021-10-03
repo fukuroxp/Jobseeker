@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    @if (!auth()->user()->hasRole('Jobseeker|Admin|Super Admin'))
+                    @if (auth()->user()->hasRole('Admin|Super Admin|HRD'))
                     <div class="card-header">
                         <button class="btn btn-outline-primary btn-modal" data-href="{{ route('jobs.create') }}"><i class='feather icon-plus'></i> Tambah</button>
                     </div>
@@ -30,6 +30,7 @@
                                             <th>Perusahaan</th>
                                             <th>Judul</th>
                                             <th>Deadline</th>
+                                            <th>Total Pelamar</th>
                                             <th>Tindakan</th>
                                         </tr>
                                     </thead>
@@ -39,6 +40,7 @@
                                                 <td>{{ $value->business->name ?? '' }}</td>
                                                 <td>{{ $value->title ?? '' }}</td>
                                                 <td>{{ $value->due_at ? date('d/m/Y', strtotime($value->due_at)) : '-' }}</td>
+                                                <td>{{$value->job_applicant->count()}} Lamaran</td>
                                                 <td>
                                                     <span class="btn-edit badge badge-pill badge-info" style="cursor: pointer;" data-href="{{ route('jobs.show', [$value->id]) }}"><i class="feather icon-eye" title="Lihat / Lamar"> Lihat / Lamar</i></span>
                                                     @if (!auth()->user()->hasRole('Jobseeker'))

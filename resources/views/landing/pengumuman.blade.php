@@ -8,12 +8,32 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-gradient.css') }}">
+    
+    <!-- Css Styles -->
+
+    <link rel="stylesheet" href="{{ asset('fashi/css/font-awesome.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('fashi/css/themify-icons.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('fashi/css/elegant-icons.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('fashi/css/owl.carousel.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('fashi/css/nice-select.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('fashi/css/jquery-ui.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('fashi/css/slicknav.min.css') }}" type="text/css">
+
+    
+    
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/colors.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/components.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css') }}">
+    <link href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" rel="stylesheet" />
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 @endsection
 
 @section('content')
+<br><br><br><br>
 <div class="banner-section spad">
     @if(Auth::check() && $available)
-    <div class="container-fluid">
+    <div class="container">
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading text-center">Selamat {{ auth()->user()->name }}</h4>
             <p class="text-center">Lamaran yang anda ajukan telah diterima.</p>
@@ -22,10 +42,10 @@
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container">
         <section id="basic-datatable">
             <div class="row">
-                <div class="col-12">
+                <div class="col-10">
                     <div class="card">
                         <div class="card-content">
                             <div class="card-body card-dashboard">
@@ -60,16 +80,8 @@
     </div>
     @endif
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="filter-control">
-                    <ul>
-                        <li class="active">Daftar Nama Lolos</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <div class="container">
+        
         <section id="column-selectors">
             <div class="row">
                 <div class="col-12">
@@ -106,6 +118,8 @@
         </section>
     </div>
 </div>
+
+<br><br><br><br><br><br>
 @endsection
 
 @section('js')
@@ -124,4 +138,6 @@
     <script src="{{ asset('app-assets/js/scripts/components.js') }}"></script>
 
     <script src="{{ asset('app-assets/js/scripts/datatables/datatable.js') }}"></script>
+    
+    
 @endsection

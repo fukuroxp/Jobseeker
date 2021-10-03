@@ -21,7 +21,7 @@ class SponsorController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {  
         $input = $request->except('_token');
 
         if ($request->hasFile('image')) {

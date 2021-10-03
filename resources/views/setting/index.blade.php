@@ -172,7 +172,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <div class="controls">
-                                                            {!! Form::label('phone', 'Telefon') !!}
+                                                            {!! Form::label('phone', 'No. Telpon') !!}
                                                             {!! Form::number('phone', $business->phone ?? '', ['class' => 'form-control', 'required']) !!}
                                                         </div>
                                                     </div>

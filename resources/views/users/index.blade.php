@@ -18,7 +18,10 @@
                 <div class="card">
                     <div class="card-header">
                         <button class="btn btn-outline-primary btn-modal" data-href="{{ route('users.create') }}"><i class='feather icon-plus'></i> Tambah</button>
+                        
+                        <a class="btn btn-outline-success" target="__blank" href="{{route('excel.pengguna')}}"><i class='feather icon-download'></i> Cetak Excel</a>
                     </div>
+                    
                     <div class="card-content">
                         <div class="card-body card-dashboard">
                             <div class="table-responsive">
@@ -39,7 +42,8 @@
                                                 <td>
                                                     <div class="chip chip-success">
                                                         <div class="chip-body">
-                                                            <div class="chip-text">{{ $value->getRoleNames()[0] }}</div>
+                                                            
+                                                            <div class="chip-text">{{ $value->getRoleNames()[0] ?? '-' }}</div>
                                                         </div>
                                                     </div>
                                                 </td>

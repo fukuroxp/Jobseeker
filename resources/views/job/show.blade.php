@@ -14,17 +14,28 @@
                 </div>
                 <div class="col-md-10">
                     <h3 class="mb-0">{{ $data->title ?? '' }}</h3>
-                    <span class="text-small"><b>Jenis Pekerjaan:</b> {{ $data->type ?? '-' }} <b>Minimal Study:</b> {{ $data->study ?? '-' }}</span>
-                    <span class="text-small">
-                        {!! $data->description ?? '' !!}
-                    </span>
+                    <hr>
+                    <ul>
+                        <span class="text-medium" style="font-size: 15px; line-height: 1.3;"><li><b>Jenis Pekerjaan:</b> {{ $data->type ?? '-' }} <br></li> <li><b>Minimal Study:</b> {{ $data->study ?? '-' }}</li> <li><b>Deadline:</b> {{ date('d-m-Y', strtotime($data->due_at)) ?? '-' }}</li></span>
+                        <li> 
+                            <hr>
+                            <span class="text-medium" style="font-size: 15.5px; line-height: 1.1;">
+                                {!! $data->description ?? '' !!}
+                            </span>
+                        </li>
+                    </ul>
+                    
                 </div>
             </div>
         </div>
         <div class="modal-footer">
             @if (auth()->user())
-                @if(auth()->user()->hasRole('Jobseeker|HRD'))
-                <button data-dismiss="modal" class="btn btn-primary btn-apply" data-href="{{ route('jobs.getApply', [$data->id]) }}">Lamar</button>
+                @if(auth()->user()->hasRole('Jobseeker'))
+                    @if(App\JobApplicant::where('user_id', auth()->user()->id)->where('business_id', $data->business_id)->count() < 4)
+                        <button data-dismiss="modal" class="btn btn-primary btn-apply" data-href="{{ route('jobs.getApply', [$data->id]) }}">Lamar</button>
+                    @else
+                        <button class="btn btn-warning" data-href="#">Maaf! Lamaran anda untuk Perusahaan {{$data->business->name}}, telah dibatasi</button>
+                    @endif
                 @endif
             @else
                 <a class="btn btn-primary" href="{{ route('login') }}">Login Untuk Melamar</a>

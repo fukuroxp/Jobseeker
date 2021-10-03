@@ -1,62 +1,55 @@
-<header class="header-section">
-    <div class="header-top">
-        <div class="container">
-            <div class="ht-left">
-                <div class="mail-service">
-                    <i class=" fa fa-envelope"></i>
-                    info@unesa.ac.id
-                </div>
-                <div class="phone-service">
-                    <i class=" fa fa-phone"></i>
-                    +6231-99423002
-                </div>
-            </div>
-            <div class="ht-right">
-                <a href="{{ auth()->user() ? route('dashboard') : route('login') }}" class="login-panel"><i class="fa fa-user"></i>{{ auth()->user() ? auth()->user()->name : 'Login' }}</a>
-                <div class="top-social">
-                        {{ now()->format('l, d F Y') }}
-                </div>
-                <div class="top-social">
-                    <a href="#"><i class="ti-facebook"></i></a>
-                    <a href="#"><i class="ti-twitter-alt"></i></a>
-                    <a href="#"><i class="ti-linkedin"></i></a>
-                    <a href="#"><i class="ti-pinterest"></i></a>
-                </div>
-            </div>
+<!-- Header start -->
+<div class="header">
+  <div class="container">
+    <div class="row">
+        <div class="col-md-1 col-sm-1 col-xs-3">
+            <ul class="translation-links" style="margin-top: 5%;">
+            <li><a href="#" class="english" data-lang="English"><img width="40%" src="data:image/png;base64,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"> <small>Eng</small></a></li>
+            <li><a href="#" class="indonesian" data-lang="Indonesian"><img width="40%" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAAADFBMVEX////OESbKAAbnjpdmK/CNAAAA20lEQVR4nO3QsRGAQAzAsAD770wf139QSBP4PBfbfB3wQ56UJ+VJeVKelCflSXlSnpQn5Ul5Up6UJ+VJeVKelCflSXlSnpQn5Ul5Up6UJ+VJeVKelCflSXlSnpQn5Ul5Up6UJ+VJeVKelCflSXlSnpQn5Ul5Up6UJ+VJeVKelCflSXlSnpQn5Ul5Up6UJ+VJeVKelCflSXlSnpQn5Ul5Up6UJ+VJeVKelCflSXlSnpQn5Ul5Up6UJ+VJeVJzs83DNgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzzAnoGZg5GBxcoAAAAAElFTkSuQmCC"> <small>Indo</small></a></li>
+        </ul>
         </div>
-    </div>
+      <div class="col-md-3 col-sm-3 col-xs-12">
+           <a href="#" class="logo"><img src="{{ asset('app-assets/images/logo/lohead.png') }}" alt="" height="45px" width="260px"/></a>
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="col-md-8 col-sm-12 col-xs-12"> 
+        <!-- Nav start -->
+        <div class="navbar navbar-expand-lg navbar-default" role="navigation">
+          <div class="navbar-collapse collapse" id="nav-main">
+            <ul class="navbar-nav">
+              <li class="{{ request()->is('/') ? 'active' : '' }}"><a href="{{ route('home') }}">Beranda</a></li>
 
-    <div class="container">
-        <div class="inner-header">
-            <div class="d-flex justify-content-between">
-                <div class="d-flex align-items-center">
-                    <h2><b>UNESA VIRTUAL CAREER FAIR</b></h2>
-                </div>
-                <div class="">
-                    <div class="logo">
-                        <a href="./index.html">
-                            <img src="{{ asset('app-assets/images/logo/ucc.png') }}" alt="" width="100rem" height="100rem">
-                        </a>
-                    </div>
-                </div>
-            </div>
+              @guest
+              <li><a href="{{ route('register') }}">Pendaftaran</a></li>
+              @endguest
+              
+
+              <li class="{{ request()->is('lowongan') ? 'active' : '' }}"><a href="{{ route('home.lowongan') }}">Lowongan</a></li>
+
+              <li class="{{ request()->is('pengumuman') ? 'active' : '' }}"><a href="{{ route('home.showPengumuman') }}">Pengumuman</a></li>
+              
+              <li class=""><a target="_blank" href="{{ asset('uploads/file/1606106212.pdf') }}">Panduan</a></li>
+              
+              @guest
+              <li class="postjob"><a href="{{route('login')}}">Masuk</a></li>
+              
+              @else
+              <a href="{{ route('dashboard')  }}" class="login-panel"><i class="fa fa-user"></i>{{ auth()->user()->name }}</a>
+              @endguest
+                
+            </ul>
+            <!-- Nav collapes end --> 
+          </div>
+          <div class="clearfix"></div>
         </div>
+        <!-- Nav end --> 
+      </div>
     </div>
-    
-    <div class="nav-item">
-        <div class="container">
-            <nav class="nav-menu mobile-menu">
-                <ul>
-                    <li class="{{ request()->is('/') ? 'active' : '' }}"><a href="/">Home</a></li>
-                    @guest
-                    <li><a href="{{ route('register') }}">Registrasi</a></li>
-                    @endguest
-                    <li class="{{ request()->is('artikel') ? 'active' : '' }}"><a href="{{ route('index.artikel') }}">Berita</a></li>
-                    <li class="{{ request()->is('lowongan') ? 'active' : '' }}"><a href="{{ route('home.lowongan') }}">Lowongan</a></li>
-                    <li class="{{ request()->is('pengumuman') ? 'active' : '' }}"><a href="{{ route('home.showPengumuman') }}">Pengumuman</a></li>
-                </ul>
-            </nav>
-            <div id="mobile-menu-wrap"></div>
-        </div>
-    </div>
-</header>
+    <!-- row end --> 
+  </div>
+  <!-- Header container end --> 
+</div>
+<!-- Header end --> 

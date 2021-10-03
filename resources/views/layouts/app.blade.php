@@ -47,9 +47,17 @@
 
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    
     @yield('css')
     <!-- END: Custom CSS-->
+    <style>
+        
+        .select2{
+            min-width: 100%;
+            height: 30px;
+        }
+    </style>
 
 </head>
 <!-- END: Head-->
@@ -88,7 +96,7 @@
 
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset('app-assets/vendors/js/vendors.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
+    
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
@@ -172,6 +180,9 @@
 
         $('div.alert').not('.alert-important').delay(5000).fadeOut(350);
     </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    
     <!-- BEGIN: Page JS-->
     @yield('js')
     <!-- END: Page JS-->

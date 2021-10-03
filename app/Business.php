@@ -11,6 +11,10 @@ class Business extends Model
     public function jobs() {
         return $this->hasMany(Job::class);
     }
+    
+    public function job_applicant() {
+        return $this->hasMany(JobApplicant::class);
+    }
 
     public function user() {
         return $this->belongsTo(Job::class);

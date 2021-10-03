@@ -222,6 +222,7 @@
                                                 </div>
                                             </fieldset>
                                         </div>
+                                        
                                     </div>
                                     <br>
                                     <div class="row">
@@ -243,6 +244,16 @@
                                                 <div class="custom-file">
                                                     <input type="file" class="custom-file-input" id="bukti" name="bukti">
                                                     <label class="custom-file-label" for="bukti">Pilih file</label>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        
+                                        <div class="col-sm-6">
+                                            <fieldset class="form-group">
+                                                <label for="portofolio">Portofolio </label>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="portofolio" name="portofolio">
+                                                    <label class="custom-file-label" for="portofolio">Pilih file</label>
                                                 </div>
                                             </fieldset>
                                         </div>

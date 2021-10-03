@@ -16,6 +16,13 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    @if (auth()->user()->hasRole('Admin|Super Admin'))
+                        <div class="card-header">
+                            <button class="" style="visibility:hidden;"></button>
+                            <a class="btn btn-outline-success pull-right" style="float:right;" target="__blank" href="{{route('excel.pelamar')}}"><i class='feather icon-download'></i> Cetak Excel</a>
+                        </div>
+                    @endif
+                    
                     <div class="card-content">
                         <div class="card-body card-dashboard">
                             <div class="table-responsive">
@@ -39,10 +46,10 @@
                                         @foreach ($data as $value)
                                             <tr>
                                                 <td>{{ date('d/m/Y', strtotime($value->created_at)) }}</td>
-                                                <td>{{ $value->user->name ?? '' }}</td>
+                                                <td>{{ $value->user->profile->nama ?? '' }}</td>
                                                 @if (!auth()->user()->hasRole('Jobseeker'))
                                                 <td>
-                                                    <a target="_blank" href="{{ route('applicants.detail', [$value->user->id]) }}">Lihat</a>
+                                                    <a target="_blank" href="{{ route('applicants.detail', [$value->id]) }}">Lihat</a>
                                                 </td>
                                                 @endif
                                                 <td>{{ $value->business->name ?? '' }}</td>
@@ -57,16 +64,16 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                @if (!auth()->user()->hasRole('Jobseeker'))
+                                                @if (auth()->user()->hasRole('HRD'))
                                                     <td>
                                                         @if ($value->status == 'waiting')
                                                             <span class="btn-edit badge badge-pill badge-success" style="cursor: pointer;" data-status="" data-href="{{ route('jobs.getApproval', [$value->id, 'approved']) }}"><i class="feather icon-check" title="Terima"> Terima</i></span>
                                                             <span class="btn-edit badge badge-pill badge-danger" style="cursor: pointer;" data-status="" data-href="{{ route('jobs.getApproval', [$value->id, 'rejected']) }}"><i class="feather icon-x" title="Tolak"> Tolak</i></span>
                                                         @endif
-                                                        @if(auth()->user()->hasRole('Jobseeker'))
-                                                        -
-                                                        @endif
+                                
                                                     </td>
+                                                @else
+                                                <td>-</td>
                                                 @endif
                                             </tr>
                                         @endforeach

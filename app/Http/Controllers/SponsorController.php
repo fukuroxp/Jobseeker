@@ -21,13 +21,16 @@ class SponsorController extends Controller
     }
 
     public function store(Request $request)
-    {  
+    {
         $input = $request->except('_token');
+         $validator = Validator::make($request->all(), [
+            'image' => 'mimes:jpeg,png',
+        ]);
 
         if ($request->hasFile('image')) {
             $input['image'] = time() . '.' . request()->image->getClientOriginalExtension();
-
-            request()->image->move(public_path('uploads/images/'), $input['image']);
+            request()->image->store('public/uploads');
+            //request()->image->move(public_path('uploads/images/'), $input['image']);
         }
 
         Sponsor::create($input);

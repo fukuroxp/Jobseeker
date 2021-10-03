@@ -6,7 +6,6 @@ use App\Job;
 use App\JobApplicant;
 use App\Subscription;
 use App\Setting;
-use Illuminate\Support\Str;
 
 use App\Mail\ApplicantMail;
 
@@ -40,10 +39,7 @@ class JobController extends Controller
     {
         if(auth()->user()->hasRole('HRD')) {
             $data = Job::where('business_id', auth()->user()->business->id)->get();
-        } elseif(auth()->user()->hasRole('Jobseeker')) {
-            $data = Job::where('due_at', '>=', date("Y-m-d"))->get();
-        }
-        else{
+        } else {
             $data = Job::all();
         }
         return view('job.index', compact('data'));
@@ -66,22 +62,12 @@ class JobController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-        //return $request->all();
-        if($request->has('business_id'))
-        {
-            $input = $request->all();
-        }
-        else{
-            $input = $request->all();
-            $input['business_id'] = auth()->user()->business->id;
-        }
-        $input['slug'] = Str::slug($request->title);
+    {
+        $input = $request->all();
+        $input['business_id'] = auth()->user()->business->id;
         
-        $jobs = Job::create($input);
-        $jobs->category()->sync($request->category);
-        $jobs->city()->sync($request->city);
-        
+        Job::create($input);
+
         flash('Berhasil menambahkan lowongan')->success();
 
         return redirect()->route('jobs.index');
@@ -96,26 +82,6 @@ class JobController extends Controller
     public function show($id)
     {
         $data = Job::find($id);
-        
-        if($data->business_id == 14)
-        {
-            return view('job.request.aia', compact('data'));
-        }
-        else{
-            return view('job.show', compact('data'));
-        }
-        
-    }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show2($slug)
-    {
-        $data = Job::where('slug', $slug)->first();
 
         return view('job.show', compact('data'));
     }
@@ -141,21 +107,10 @@ class JobController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if($request->has('business_id'))
-        {
-            $input = $request->all();
-        }
-        else{
-            $input = $request->all();
-            $input['business_id'] = auth()->user()->business->id;   
-        }
-        $input['slug'] = Str::slug($request->title);
+        $input = $request->all();
         
-        $jobs = Job::find($id);
-        $jobs->update($input);
-        $jobs->category()->sync($request->category);
-        $jobs->city()->sync($request->city);
-        
+        Job::find($id)->update($input);
+
         flash('Berhasil mengedit lowongan')->success();
 
         return redirect()->route('jobs.index');
@@ -169,16 +124,14 @@ class JobController extends Controller
      */
     public function destroy($id)
     {
-        if(JobApplicant::where('job_id', $id)->count() < 1) {
-            $job = Job::find($id)->delete();
-            $job->category()->detach();
-            $job->city()->detach();
-            
+        try {
+            Job::find($id)->delete();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menghapus lowongan'
             ]);
-        } else {
+        } catch(\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => 'Gagal menghapus lowongan'
@@ -192,11 +145,8 @@ class JobController extends Controller
         return view('job.apply', compact('data'));
     }
     
-    public function apply($id, Request $request)
-    {   
-        ini_set('upload_max_filesize', '10M');
-        ini_set('post_max_size', '10M');
-        
+    public function apply($id)
+    {
         $input = request()->all();
 
         $job = Job::find($id);
@@ -231,12 +181,6 @@ class JobController extends Controller
         $input['business_id'] = $job->business_id;
         $input['job_id'] = $job->id;
         $input['user_id'] = auth()->user()->id;
-        
-        if ($request->hasFile('lampiran')) {
-            $input['lampiran'] = Str::slug(auth()->user()->name). '_lampiran_' . sha1(time()) . '.' . request()->lampiran->getClientOriginalExtension();
-
-            request()->lampiran->move(public_path('uploads/lampiran/'), $input['lampiran']);
-        }
         
         $apply = JobApplicant::create($input);
 

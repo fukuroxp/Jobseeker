@@ -15,14 +15,4 @@ class Job extends Model
     public function job_applicant() {
         return $this->hasMany(JobApplicant::class);
     }
-    
-    public function category()
-	{
-		return $this->belongsToMany('App\Category');
-	}
-	
-	public function city()
-	{
-		return $this->belongsToMany('App\City');
-	}
 }
